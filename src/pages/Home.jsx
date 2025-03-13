@@ -13,6 +13,17 @@ const Home = () => {
             style={{ color: "black", textDecoration: "underline" }}
         >
         Elgato
+        </a>, a division of CORSAIR. Previously at GritWorld and Bosch.
+      </Text>
+      <Text fontSize="6xl" fontWeight={600} textTransform={"uppercase"}>
+        UX Designer based in Germany. Currently working at {" "}
+        <a 
+            href="https://elgato.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style={{ color: "black", textDecoration: "underline" }}
+        >
+        Elgato
         </a>, a division of CORSAIR. Previously at Bosch and GritWorld.
       </Text>
     </Box>

@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
-    <Flex justify="space-between" align="center" p={4} bg="white">
+    <Flex justify="space-between" align="center" p={6} bg="white">
       {/* Left side - Logo or Title */}
-      <Heading size="md">
+      <Heading size="2xl">
         <Link to="/">Rodrigo Baldaia</Link>
       </Heading>
 
