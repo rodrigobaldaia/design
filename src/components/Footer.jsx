@@ -2,6 +2,7 @@
 
 import { Box, Flex, IconButton, Link, Button, useClipboard } from "@chakra-ui/react";
 import { ArrowUp, Linkedin } from "lucide-react";
+import { FaLinkedin } from "@react-icons/all-files/fa/FaLinkedin";
 
 const Footer = () => {
 
@@ -26,7 +27,7 @@ const Footer = () => {
               variant="ghost"
               color="black"
             >
-              <Linkedin />
+              <FaLinkedin />
             </IconButton>
           </Link>
 
