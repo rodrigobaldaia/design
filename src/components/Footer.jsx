@@ -15,7 +15,7 @@ const Footer = () => {
       <Flex justify="space-between" align="center">
         {/* Email */}
         <Button variant="ghost" size="sm">
-      your.email@example.com
+      rodbaldaia@gmail.com
     </Button>
 
         {/* Social & Scroll to Top Buttons */}
