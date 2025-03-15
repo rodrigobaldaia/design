@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Text, Box, Button, Image, Flex } from "@chakra-ui/react";
 import { ArrowDown } from "lucide-react";
 import { useRef, useEffect } from "react";

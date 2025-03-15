@@ -5,14 +5,14 @@ const Header = () => {
   const navigate = useNavigate();
 
   const handleWorkClick = () => {
-    navigate("/", { state: { scrollToProjects: true } });
+    navigate("/portfolio-github/", { state: { scrollToProjects: true } });
   };
 
   return (
     <Flex justify="space-between" align="center" p={6} bg="white">
       {/* Left side - Logo or Title */}
       <Heading size="2xl">
-        <Link to="/">Rodrigo Baldaia</Link>
+        <Link to="/portfolio-github/">Rodrigo Baldaia</Link>
       </Heading>
 
       {/* Right side - Navigation buttons */}
@@ -20,7 +20,7 @@ const Header = () => {
         <Button variant="ghost" size="lg" onClick={handleWorkClick}>
           Work
         </Button>
-        <Button /*as={Link} to="/about"*/ variant="ghost" size="lg">
+        <Button as={Link} to="/about" variant="ghost" size="lg">
           About
         </Button>
       </Flex>
