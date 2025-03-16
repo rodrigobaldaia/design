@@ -56,14 +56,14 @@ const Footer = () => {
           </Link>
 
           {/* Scroll to Top Button */}
-          <IconButton
+          {/*<IconButton
             aria-label="Scroll to Top"
             variant="ghost"
             color="black"
             onClick={scrollToTop}
           >
             <ArrowUp />
-          </IconButton>
+          </IconButton>*/}
         </Flex>
       </Flex>
     </Box>

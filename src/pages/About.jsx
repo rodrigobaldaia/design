@@ -2,8 +2,8 @@ import { Text, Box, Flex, Heading } from "@chakra-ui/react";
 
 function About() {
   return (
-    <Flex px={4} py={4}>
-      <Box flex="2" p={6} mt={4} fontSize="2xl">
+    <Flex p={8} gap={16}>
+      <Box flex="2" mt={4} fontSize="2xl">
         <Text mb={4}>
           I'm a UX/UI designer with a passion for crafting intuitive digital experiences.
           Currently, I'm working on desktop software applications at Elgato,
@@ -17,7 +17,7 @@ function About() {
           Bosch before moving to Germany to continue my career in UX Design.</Text>
       </Box>
 
-      <Box flex="1" p={6} mt={4} fontSize="2xl">
+      <Box flex="1" mt={4} fontSize="2xl">
         <Heading as="h2" size="2xl" mb={8} textTransform={"uppercase"}>
         Experience
         </Heading>
