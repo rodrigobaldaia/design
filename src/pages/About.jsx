@@ -2,8 +2,8 @@ import { Text, Box, Flex, Heading } from "@chakra-ui/react";
 
 function About() {
   return (
-    <Flex p={8} gap={16}>
-      <Box flex="2" mt={4} fontSize="2xl">
+    <Flex direction={{ base: "column", md: "row" }} p={8} gap={16}>
+      <Box flex="2" mt={4} fontSize="xl">
         <Text mb={4}>
           I'm a UX/UI designer with a passion for crafting intuitive digital experiences.
           Currently, I'm working on desktop software applications at Elgato,
@@ -17,55 +17,56 @@ function About() {
           Bosch before moving to Germany to continue my career in UX Design.</Text>
       </Box>
 
-      <Box flex="1" mt={4} fontSize="2xl">
-        <Heading as="h2" size="2xl" mb={8} textTransform={"uppercase"}>
+      <Box flex="1" mt={{ base: 0, md: 4 }} fontSize="xl">
+        <Heading as="h2" mb={8} textTransform={"uppercase"}>
         Experience
         </Heading>
 
-        <Heading as="h3" size="1xl">
+        <Heading as="h3">
         Elgato, a division of CORSAIR
         </Heading>
         <Text mb={4}>
         UX Designer
         </Text>
 
-        <Heading as="h3" size="1xl">
+        <Heading as="h3" >
         GritWorld
         </Heading>
         <Text mb={4}>
         Junior UX/UI Designer
         </Text>
 
-        <Heading as="h3" size="1xl">
+        <Heading as="h3" >
         Bosch
         </Heading>
-        <Text mb={4}>
+        <Text >
         Graphic Designer
         </Text>
 
-        <Heading as="h2" size="2xl" mb={8} mt={16} textTransform={"uppercase"}>
+        <Heading as="h2" mb={8} mt={16} textTransform={"uppercase"}>
         Education
         </Heading>
 
-        <Heading as="h3" size="1xl">
-        Elgato, a division of CORSAIR
-        </Heading>
-        <Text mb={4}>
-        UX Designer
+        <Text color="gray.500">
+        2017 - 2020
         </Text>
 
-        <Heading as="h3" size="1xl">
-        GritWorld
+        <Heading as="h3">
+        Master in Product and Industrial Design
         </Heading>
         <Text mb={4}>
-        Junior UX/UI Designer
+        University of Porto, Portugal
         </Text>
 
-        <Heading as="h3" size="1xl">
-        Bosch
+        <Text color="gray.500">
+        2014 - 2017
+        </Text>
+
+        <Heading as="h3" >
+        Bachelor in Design
         </Heading>
-        <Text mb={4}>
-        Graphic Designer
+        <Text mb={8}>
+        University of Aveiro, Portugal
         </Text>
 
       </Box>

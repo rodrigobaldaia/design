@@ -8,7 +8,7 @@ import { useState } from "react";
 
 const Footer = () => {
   const [copied, setCopied] = useState(false);
-  const email = "your.email@example.com";
+  const email = "rodbaldaia@gmail.com";
   const [isHovered, setIsHovered] = useState(false);
 
 
