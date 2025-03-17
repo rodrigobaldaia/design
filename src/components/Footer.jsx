@@ -1,9 +1,11 @@
 "use client"
 
-import { Box, Flex, IconButton, Link, Button, Text, HStack} from "@chakra-ui/react";
+import { Box, Flex, IconButton, Link, Button, Text, HStack, Tooltip, Heading } from "@chakra-ui/react";
 import { ArrowUp, Linkedin } from "lucide-react";
 import { FaLinkedin } from "@react-icons/all-files/fa/FaLinkedin";
-import { FaClipboard} from "@react-icons/all-files/fa/FaClipboard";
+import { FaClipboard } from "@react-icons/all-files/fa/FaClipboard";
+import { RxArrowTopRight } from "react-icons/rx";
+import { LuCopy } from "react-icons/lu";
 import { useState } from "react";
 
 const Footer = () => {
@@ -23,47 +25,69 @@ const Footer = () => {
   };
 
   return (
-    <Box as="footer" py={4} px={4} bg="white">
-      <Flex justify="space-between" align="center">
-        {/* Email with Copy Clipboard */}
-        <HStack spacing={2}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}>
-          <Text pl={2}> {copied ? "Email copied!" : email}</Text>
-          {isHovered && (
-          <IconButton
-          aria-label="Copy email"
-          variant="ghost"
-          size="sm"
-          onClick={handleCopy}
+    <Box as="footer" py={6} px={6} bg="white">
+      <Flex justify="space-between" align="left" direction={{ base: "column", md: "row" }}>
+        {/* Desktop: Show email + hover effect */}
+        <HStack
+          spacing={4}
+          display={{ base: "none", md: "flex" }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
         >
-          <FaClipboard />
-        </IconButton>
-       )}
+          <Link 
+          onClick={handleCopy}
+          >{copied ? "Email copied!" : email}</Link>
+          {isHovered && (
+            <LuCopy />
+            
+          )}
         </HStack>
+
+        {/* Mobile: Show a full button with email + clipboard icon + Linkedin */}
+        <Flex direction="column" display={{ base: "flex", md: "none" }} gap={2} fontSize="md">
+          <Heading as="h1" fontWeight="semibold">
+            Contact
+          </Heading>
+          
+          <Link
+            aria-label="Copy email"
+            w="fit-content"
+            onClick={handleCopy}
+            gap={2}
+          >
+            {copied ? "Email copied!" : email}
+            <LuCopy />
+          </Link>
+
+          <Link href="https://www.linkedin.com/in/rodrigobaldaia/" target="_blank">
+          Linkedin
+          <RxArrowTopRight />
+          </Link>
+
+        </Flex>
 
         {/* Social & Scroll to Top Buttons */}
         <Flex gap={3}>
-          {/* LinkedIn Button */}
-          <Link href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
-            <IconButton
-              aria-label="LinkedIn"
-              variant="ghost"
-              color="black"
-            >
-              <FaLinkedin />
-            </IconButton>
-          </Link>
+          {/* LinkedIn Button Desktop */}
+          <IconButton
+            as="a" href="https://www.linkedin.com/in/rodrigobaldaia/" target="_blank"
+            display={{ base: "none", md: "flex" }}
+            aria-label="LinkedIn"
+            variant="ghost"
+          >
+            <FaLinkedin />
+          </IconButton>
 
-          {/* Scroll to Top Button */}
-          {/*<IconButton
+          {/* Scroll to Top Button Desktop */}
+          <IconButton
+            display={{ base: "none", md: "flex" }}
             aria-label="Scroll to Top"
             variant="ghost"
             color="black"
             onClick={scrollToTop}
           >
             <ArrowUp />
-          </IconButton>*/}
+          </IconButton>
         </Flex>
       </Flex>
     </Box>

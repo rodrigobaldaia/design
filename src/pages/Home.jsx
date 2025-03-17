@@ -1,8 +1,11 @@
-import { useLocation } from "react-router-dom";
-import { Text, Box, Button, Image, Flex, Heading, Link, Grid, IconButton } from "@chakra-ui/react";
+import { useLocation, Link } from "react-router-dom";
+import { Text, Box, Button, Image, Flex, Heading, Grid, IconButton, Tabs } from "@chakra-ui/react";
 import { ArrowDown, ArrowUp } from "lucide-react";
+import { LuExternalLink } from "react-icons/lu";
+import { RxArrowTopRight } from "react-icons/rx";
 import { MdLockOutline } from "react-icons/md";
 import { useRef, useEffect, useState } from "react";
+
 
 const Home = () => {
 
@@ -39,7 +42,7 @@ const Home = () => {
   return (
 
     <Box p={8} my={{ base: "4", lg: "16" }}> {/* Adds padding around the content */}
-      <Text fontSize={{ base: "3xl", md: "5xl", lg: "5xl", xl: "6xl" }} fontWeight={600} textTransform={"uppercase"}>
+      <Text fontSize={{ base: "4xl", md: "5xl", lg: "5xl", xl: "6xl" }} fontWeight={600} textTransform={"uppercase"}>
         UX Designer based in Germany. Currently working at {" "}
         <a
           href="https://elgato.com"
@@ -51,7 +54,7 @@ const Home = () => {
         </a>, a division of CORSAIR. Previously at Bosch.
       </Text>
 
-      <Flex justify="center" mt={{ base: "20", lg: "24" }}>
+      <Flex justify="center" mt={{ base: "20", lg: "24" }} display={{ base: "none", md: "flex" }}>
         <Button
           onClick={scrollToProjects}
           variant="outline"
@@ -77,8 +80,8 @@ const Home = () => {
           </video>
         </Box>
       </Box>
-      <Flex direction={{ base: "column", md: "row" }} justify="center" w="100%" py={16} gap={16} >
-        <Box fontSize="xl" maxW="600px">
+      <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="900px" w="100%" mx="auto" py={16} gap={16} >
+        <Box flex="2" fontSize="xl" maxW="700px" textAlign="left">
 
           <Text mb={6}>
             Wave Link is a professional audio mixing software for content creators,
@@ -104,7 +107,7 @@ const Home = () => {
 
         </Box>
 
-        <Box fontSize="xl">
+        <Box flex="1"fontSize="xl" textAlign="left">
 
           <Heading as="h3" mb={2}>
             My role
@@ -138,7 +141,7 @@ const Home = () => {
         </video>
       </Box>
 
-      <Box mt={{ base: 16, md: 24 }}  pt={8}>
+      <Box mt={{ base: 16, md: 24 }} pt={8}>
         <Text fontSize="2xl" fontWeight={600}>
           Elgato Capture - Play and capture on iPad
         </Text>
@@ -149,8 +152,8 @@ const Home = () => {
           <Image src="./assets/Game_Capture_Neo_Lifestyle_Shot_02.jpg" w="100%" maxHeight="550px" borderRadius="lg" />
         </Box>
       </Box>
-      <Flex direction={{ base: "column", md: "row" }} justify="center" w="100%" py={16} gap={16} >
-        <Box fontSize="xl" maxW="600px">
+      <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="900px" w="100%" mx="auto" py={16} gap={16} >
+        <Box flex="2" fontSize="xl" maxW="700px" textAlign="left">
           <Text mb={6}>
             Elgato Capture brings high-quality game and video recording to the iPad, offering a portable, laptop-free solution for streamers, content creators, and gamers who want to relive their best moments. With support for PlayStation, Xbox, Nintendo Switch, Steam Deck, and more, the app seamlessly integrates with Elgato's capture cards and cameras, enabling professional-grade recording on the go.
           </Text>
@@ -160,7 +163,7 @@ const Home = () => {
 
         </Box>
 
-        <Box fontSize="xl">
+        <Box flex="1"fontSize="xl" textAlign="left">
 
           <Heading as="h3" mb={2}>
             My role
@@ -198,15 +201,15 @@ const Home = () => {
           <Image src="./assets/Input_value_helper.png" w="100%" h="auto" borderRadius="lg" />
         </Box>
       </Box>
-      <Flex direction={{ base: "column", md: "row" }} justify="center" w="100%" py={16} gap={16} >
-        <Box fontSize="xl" maxW="600px">
-          <Text mb={6}>
+      <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="900px" w="100%" mx="auto" py={16} gap={16}>
+        <Box flex="2" fontSize="xl" maxW="700px" textAlign="left">
+          <Text mb={{ base: 0, md: 6 }}>
             I worked at GritWorld on GritGene, helping develop their design system and conducting user research to enhance the UX of GritGene, their desktop software. This experience provided valuable insights into designing for advanced graphics and real-time rendering tools. Due to confidentiality, I can't share details but feel free to reach out if you'd like to learn more.
           </Text>
 
         </Box>
 
-        <Box fontSize="xl">
+        <Box flex="1"fontSize="xl" textAlign="left">
 
           <Heading as="h3" mb={2}>
             My role
@@ -248,10 +251,11 @@ const Home = () => {
             <Button
               as="a" href="https://products.electrovoice.com/emea/en/everse-8/" target="_blank"
               variant="outline"
-              size="lg"
+              size="md"
               rounded="full"
             >
               See product page
+              <RxArrowTopRight />
             </Button>
           </Flex>
         </Box>
@@ -267,10 +271,11 @@ const Home = () => {
             <Button
               as="a" href="https://products.electrovoice.com/emea/en/evolve-50m/" target="_blank"
               variant="outline"
-              size="lg"
+              size="md"
               rounded="full"
             >
               See product page
+              <RxArrowTopRight />
             </Button>
           </Flex>
         </Box>
@@ -287,16 +292,17 @@ const Home = () => {
             <Button
               as="a" href="https://products.electrovoice.com/emea/en/mts/" target="_blank"
               variant="outline"
-              size="lg"
+              size="md"
               rounded="full"
             >
               See product page
+              <RxArrowTopRight />
             </Button>
           </Flex>
         </Box>
       </Box>
 
-      <Box mt={{ base: 16, md: 24 }} pt={8} mb={8}>
+      <Box mt={{ base: 16, md: 24 }} pt={8} mb={{ base: 12, md: 0 }} >
 
         <Box >
           <Box w="100%" borderRadius="lg" bg={"gray.100"} justifyContent="center" display="flex"  >
@@ -310,23 +316,26 @@ const Home = () => {
             <Button
               as="a" href="https://products.rtsintercoms.com/na/en/dbp/" target="_blank"
               variant="outline"
-              size="lg"
+              size="md"
               rounded="full"
             >
               See product page
+              <RxArrowTopRight />
             </Button>
           </Flex>
         </Box>
       </Box>
 
+      {/* Scroll to Top Button */}
       <IconButton
+        display={{ base: "flex", md: "none" }}
         aria-label="Scroll to Top"
         variant="subtle"
         rounded="full"
-        size="md"
+        size="lg"
         onClick={scrollToTop}
         position="fixed"
-        bottom="16" // Spacing from bottom
+        bottom="32" // Spacing from bottom
         left="50%"
         transform="translateX(-50%)" // Centers the button
         zIndex="1000" // Ensures it stays on top
@@ -335,9 +344,10 @@ const Home = () => {
         bg="rgba(255, 255, 255, 0.7)"
         backdropFilter="blur(10px)"
         _hover={{ bg: "rgba(255, 255, 255, 1)" }}
-      >
+        >
         <ArrowUp />
       </IconButton>
+
     </Box>
 
 

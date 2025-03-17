@@ -1,10 +1,13 @@
-import { Text, Box, Flex, Heading } from "@chakra-ui/react";
+import { Text, Box, Flex, Heading, Image } from "@chakra-ui/react";
 
 function About() {
   return (
-    <Flex direction={{ base: "column", md: "row" }} p={8} gap={16}>
-      <Box flex="2" mt={4} fontSize="xl">
-        <Text mb={4}>
+    <Flex direction={{ base: "column", md: "row" }} p={6} gap={16}>
+      <Box flex="2" mt={{ base: 0, md: 4 }} fontSize="xl">
+        <Flex justify={{ base: "center", md: "left" }}>
+          <Image src="/portfolio-github/assets/photo_rb.jpg" boxSize="180px" rounded="lg" mb={8} />
+        </Flex>
+        <Text mb={4} mt={4}>
           I'm a UX/UI designer with a passion for crafting intuitive digital experiences.
           Currently, I'm working on desktop software applications at Elgato,
           shaping tools that empower creators.</Text>
@@ -18,59 +21,60 @@ function About() {
       </Box>
 
       <Box flex="1" mt={{ base: 0, md: 4 }} fontSize="xl">
-        <Heading as="h2" mb={8} textTransform={"uppercase"}>
-        Experience
+        <Heading as="h1" mb={6}>
+          Experience
         </Heading>
 
-        <Heading as="h3">
-        Elgato, a division of CORSAIR
-        </Heading>
-        <Text mb={4}>
-        UX Designer
-        </Text>
-
-        <Heading as="h3" >
-        GritWorld
+        <Heading as="h1">
+          Elgato, a division of CORSAIR
         </Heading>
         <Text mb={4}>
-        Junior UX/UI Designer
+          UX Designer
         </Text>
 
-        <Heading as="h3" >
-        Bosch
+        <Heading as="h1" >
+          GritWorld
+        </Heading>
+        <Text mb={4}>
+          Junior UX/UI Designer
+        </Text>
+
+        <Heading as="h1" >
+          Bosch
         </Heading>
         <Text >
-        Graphic Designer
+          Graphic Designer
         </Text>
 
-        <Heading as="h2" mb={8} mt={16} textTransform={"uppercase"}>
-        Education
+        <Heading as="h1" mb={6} mt={16}>
+          Education
         </Heading>
 
         <Text color="gray.500">
-        2017 - 2020
+          2017 - 2020
         </Text>
 
-        <Heading as="h3">
-        Master in Product and Industrial Design
+        <Heading as="h1">
+          Master in Product and Industrial Design
         </Heading>
         <Text mb={4}>
-        University of Porto, Portugal
+          University of Porto, Portugal
         </Text>
 
         <Text color="gray.500">
-        2014 - 2017
+          2014 - 2017
         </Text>
 
-        <Heading as="h3" >
-        Bachelor in Design
+        <Heading as="h1" >
+          Bachelor in Design
         </Heading>
         <Text mb={8}>
-        University of Aveiro, Portugal
+          University of Aveiro, Portugal
         </Text>
 
       </Box>
     </Flex>
+
   );
 }
 

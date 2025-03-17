@@ -19,7 +19,7 @@ const Header = () => {
     >
       {/* Left side - Logo or Title */}
       <Heading size="2xl">
-        <Link to="/portfolio-github/">Rodrigo Baldaia</Link>
+        Rodrigo Baldaia
       </Heading>
 
       {/* Right side - Navigation buttons */}
