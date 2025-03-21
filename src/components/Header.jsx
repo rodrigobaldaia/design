@@ -5,7 +5,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   const handleWorkClick = () => {
-    navigate("/portfolio-github/", { state: { scrollToProjects: true } });
+    navigate("/design/", { state: { scrollToProjects: true } });
   };
 
   return (
@@ -30,7 +30,7 @@ const Header = () => {
       >
         <Tabs.Root defaultValue="work" variant="plain" maxW="md" fitted size="md">
           <Tabs.List bg="bg.muted" rounded="4xl" p="1">
-            <Tabs.Trigger as={Link} to="/portfolio-github/" value="work">
+            <Tabs.Trigger as={Link} to="/design/" value="work">
               Work
             </Tabs.Trigger>
             <Tabs.Trigger as={Link} to="/about" value="About">

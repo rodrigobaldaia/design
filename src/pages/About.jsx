@@ -5,7 +5,7 @@ function About() {
     <Flex direction={{ base: "column", md: "row" }} p={6} gap={16}>
       <Box flex="2" mt={{ base: 0, md: 4 }} fontSize="xl">
         <Flex justify={{ base: "center", md: "left" }}>
-          <Image src="/portfolio-github/assets/photo_rb.jpg" boxSize="180px" rounded="lg" mb={8} />
+          <Image src="/design/assets/photo_rb.jpg" boxSize="180px" rounded="lg" mb={8} />
         </Flex>
         <Text mb={4} mt={4}>
           I'm a UX/UI designer with a passion for crafting intuitive digital experiences.
@@ -18,6 +18,46 @@ function About() {
           and strategy to create more meaningful and impactful products.</Text>
         <Text mb={4}>Originally from Portugal, I studied Design at the University of Porto and worked at
           Bosch before moving to Germany to continue my career in UX Design.</Text>
+
+        <Heading as="h1" mb={6} mt={16}>
+          Skills
+        </Heading>
+        <Flex direction={{ base: "column", md: "row" }} gap={{ base: 0, md: 12 }}>
+          <Box flex="1">
+            <Text mb={4}>
+              User research<br />
+              Usability testing<br />
+              Wireframing<br />
+              User flows<br />
+              Prototyping<br />
+            </Text>
+
+          </Box>
+
+          <Box flex="1">
+            <Text mb={4}>
+              Design systems<br />
+              Figma<br />
+              Adobe Creative Suite<br />
+              3D Visualization<br />
+              Git<br />
+            </Text>
+
+          </Box>
+
+          <Box flex="1">
+            <Text mb={0}>
+              Python<br />
+              SQL<br />
+              HTML / CSS / JS<br />
+              React/Vite<br />
+              Jira / Confluence<br />
+            </Text>
+
+          </Box>
+
+        </Flex>
+
       </Box>
 
       <Box flex="1" mt={{ base: 0, md: 4 }} fontSize="xl">
@@ -25,6 +65,9 @@ function About() {
           Experience
         </Heading>
 
+        <Text color="gray.500">
+          2023 - Present
+        </Text>
         <Heading as="h1">
           Elgato, a division of CORSAIR
         </Heading>
@@ -32,6 +75,9 @@ function About() {
           UX Designer
         </Text>
 
+        <Text color="gray.500">
+          2022 - 2023
+        </Text>
         <Heading as="h1" >
           GritWorld
         </Heading>
@@ -39,6 +85,9 @@ function About() {
           Junior UX/UI Designer
         </Text>
 
+        <Text color="gray.500">
+          2020 - 2022
+        </Text>
         <Heading as="h1" >
           Bosch
         </Heading>

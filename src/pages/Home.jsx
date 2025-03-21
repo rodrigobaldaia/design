@@ -364,9 +364,8 @@ const Home = () => {
         size="lg"
         onClick={scrollToTop}
         position="fixed"
-        bottom="32" // Spacing from bottom
-        left="50%"
-        transform="translateX(-50%)" // Centers the button
+        bottom="12" // Spacing from bottom
+        right="16"
         zIndex="1000" // Ensures it stays on top
         opacity={isVisible ? 1 : 0} // Show only when needed
         transition="opacity 0.3s ease-in-out"

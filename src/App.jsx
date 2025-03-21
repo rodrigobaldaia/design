@@ -11,7 +11,7 @@ function App() {
       <Header /> {/* Always visible on all pages */}
       <Box flex="1">
         <Routes>
-          <Route path="/portfolio-github/" element={<Home />} />
+          <Route path="/design/" element={<Home />} />
           <Route path="/about" element={<About />} />
         </Routes>
       </Box>
