@@ -1,5 +1,5 @@
-import { useLocation, Link } from "react-router-dom";
-import { Text, Box, Button, Image, Flex, Heading, Grid, IconButton, Tabs } from "@chakra-ui/react";
+import { useLocation } from "react-router-dom";
+import { Text, Box, Button, Image, Flex, Heading, Grid, IconButton, Tabs, Link } from "@chakra-ui/react";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { LuExternalLink } from "react-icons/lu";
 import { RxArrowTopRight } from "react-icons/rx";
@@ -107,7 +107,7 @@ const Home = () => {
 
         </Box>
 
-        <Box flex="1"fontSize="xl" textAlign="left">
+        <Box flex="1" fontSize="xl" textAlign="left">
 
           <Heading as="h3" mb={2}>
             My role
@@ -119,8 +119,9 @@ const Home = () => {
           <Heading as="h3" mb={2}>
             Link
           </Heading>
-          <Link href="https://www.elgato.com/us/en/s/wave-link" target="_blank" rel="noopener noreferrer">
+          <Link variant="plain" href="https://www.elgato.com/us/en/s/wave-link" target="_blank">
             View Website
+            <RxArrowTopRight />
           </Link>
 
         </Box>
@@ -163,7 +164,7 @@ const Home = () => {
 
         </Box>
 
-        <Box flex="1"fontSize="xl" textAlign="left">
+        <Box flex="1" fontSize="xl" textAlign="left">
 
           <Heading as="h3" mb={2}>
             My role
@@ -175,8 +176,9 @@ const Home = () => {
           <Heading as="h3" mb={2}>
             Link
           </Heading>
-          <Link href="https://apps.apple.com/de/app/elgato-capture/id6456798479" target="_blank" rel="noopener noreferrer">
+          <Link variant="plain" href="https://apps.apple.com/de/app/elgato-capture/id6456798479" target="_blank">
             View iPad app
+            <RxArrowTopRight />
           </Link>
 
         </Box>
@@ -209,7 +211,7 @@ const Home = () => {
 
         </Box>
 
-        <Box flex="1"fontSize="xl" textAlign="left">
+        <Box flex="1" fontSize="xl" textAlign="left">
 
           <Heading as="h3" mb={2}>
             My role
@@ -241,7 +243,14 @@ const Home = () => {
         <Text fontSize="2xl" fontWeight={400} mb={8} color={"gray.500"}>
           3D Visuals for Electro-Voice, RTS and TELEX
         </Text>
-        <Box >
+
+        <Flex mb={8} mt={16}>
+          <Text fontSize="2xl" fontWeight={600}>
+            Everse 8 - Electro-Voice
+          </Text>
+        </Flex>
+
+        <Box gap={16}>
           <Image src="./assets/Everse8_02.png" w="100%" maxH="600px" borderRadius="lg" bg={"gray.100"} />
           <Grid templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }} gap={4} maxW="100%" pt={4}>
             <Image src="./assets/Everse8_07_nbg.png" w="100%" h="auto" aspectRatio={1} objectFit="cover" borderRadius="lg" bg={"gray.100"} />
@@ -261,7 +270,15 @@ const Home = () => {
         </Box>
       </Box>
 
+
+
       <Box mt={{ base: 16, md: 24 }} pt={8}>
+        <Flex mb={8}>
+          <Text fontSize="2xl" fontWeight={600}>
+            EVOLVE 50M - Electro-Voice
+          </Text>
+        </Flex>
+
         <Box >
           <Box pb={4}>
             <Image src="./assets/EV_EVOLVE50M_Array_Exploded_Black_nbg.png" w="100%" maxH="600px" borderRadius="lg" bg={"gray.100"} />
@@ -283,6 +300,12 @@ const Home = () => {
 
       <Box mt={{ base: 16, md: 24 }} pt={8}>
 
+        <Flex mb={8}>
+          <Text fontSize="2xl" fontWeight={600}>
+            MTS Series - Electro-Voice
+          </Text>
+        </Flex>
+
         <Box >
           <Grid templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }} gap={4} maxW="100%" pt={4}>
             <Image src="./assets/EV_MTS-6154-43_Cardioid_Hero_GrilleOff_nbg.png" w="100%" h="auto" aspectRatio={1} objectFit="cover" borderRadius="lg" bg={"gray.100"} />
@@ -302,7 +325,13 @@ const Home = () => {
         </Box>
       </Box>
 
-      <Box mt={{ base: 16, md: 24 }} pt={8} mb={{ base: 12, md: 0 }} >
+      <Box mt={{ base: 16, md: 24 }} pt={8} >
+
+        <Flex mb={8}>
+          <Text fontSize="2xl" fontWeight={600}>
+            DBP - RTS Intercoms
+          </Text>
+        </Flex>
 
         <Box >
           <Box w="100%" borderRadius="lg" bg={"gray.100"} justifyContent="center" display="flex"  >
@@ -344,7 +373,7 @@ const Home = () => {
         bg="rgba(255, 255, 255, 0.7)"
         backdropFilter="blur(10px)"
         _hover={{ bg: "rgba(255, 255, 255, 1)" }}
-        >
+      >
         <ArrowUp />
       </IconButton>
 
