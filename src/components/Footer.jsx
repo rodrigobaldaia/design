@@ -1,9 +1,8 @@
 "use client"
 
-import { Box, Flex, IconButton, Link, Button, Text, HStack, Tooltip, Heading } from "@chakra-ui/react";
-import { ArrowUp, Linkedin } from "lucide-react";
+import { Box, Flex, IconButton, Link, HStack, Heading } from "@chakra-ui/react";
+import { ArrowUp } from "lucide-react";
 import { FaLinkedin } from "@react-icons/all-files/fa/FaLinkedin";
-import { FaClipboard } from "@react-icons/all-files/fa/FaClipboard";
 import { RxArrowTopRight } from "react-icons/rx";
 import { LuCopy } from "react-icons/lu";
 import { useState } from "react";
@@ -26,7 +25,13 @@ const Footer = () => {
 
   return (
     <Box as="footer" py={6} px={6} bg="white">
-      <Flex justify="space-between" align="left" direction={{ base: "column", md: "row" }}>
+      <Flex
+        maxW="1200px"
+        mx="auto"
+        justify="space-between"
+        align="left"
+        direction={{ base: "column", md: "row" }}
+      >
         {/* Desktop: Show email + hover effect */}
         <HStack
           spacing={4}

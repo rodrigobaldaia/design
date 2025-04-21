@@ -1,4 +1,4 @@
-import { Flex, Button, Heading, Tabs } from "@chakra-ui/react";
+import { Flex, Heading, Tabs } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 
 const Header = () => {
@@ -16,6 +16,10 @@ const Header = () => {
       p={8}
       bg="white"
       gap={{ base: 8, md: 0 }} // Add spacing on mobile
+      maxW="1200px"
+      mx="auto"
+      px={4} // Optional: ensures padding on smaller screens
+      width="100%"
     >
       {/* Left side - Logo or Title */}
       <Heading size="2xl">

@@ -1,7 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { Text, Box, Button, Image, Flex, Heading, Grid, IconButton, Tabs, Link } from "@chakra-ui/react";
 import { ArrowDown, ArrowUp } from "lucide-react";
-import { LuExternalLink } from "react-icons/lu";
 import { RxArrowTopRight } from "react-icons/rx";
 import { MdLockOutline } from "react-icons/md";
 import { useRef, useEffect, useState } from "react";
