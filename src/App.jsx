@@ -14,7 +14,7 @@ function App() {
       <Header /> {/* Always visible on all pages */}
       
       <Box flex="1">
-      <Box maxW="1200px" mx="auto" px={4} py={6}>
+      <Box maxW="1200px" mx="auto" px={0} py={6}>
         <Routes>
           <Route path="/design/" element={<Home />} />
           

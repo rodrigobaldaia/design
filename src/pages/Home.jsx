@@ -40,7 +40,7 @@ const Home = () => {
 
   return (
 
-    <Box p={8} my={{ base: "4", lg: "16" }}> {/* Adds padding around the content */}
+    <Box py={8} my={{ base: "4", lg: "16" }}> {/* Adds padding around the content */}
       <Text fontSize={{ base: "4xl", md: "5xl", lg: "5xl", xl: "6xl" }} fontWeight={600} textTransform={"uppercase"}>
         UX Designer based in Germany. Currently working at {" "}
         <a
@@ -79,7 +79,7 @@ const Home = () => {
           </video>
         </Box>
       </Box>
-      <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="900px" w="100%" mx="auto" py={16} gap={16} >
+      <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="1200px" w="100%" mx="auto" py={16} gap={16} >
         <Box flex="2" fontSize="xl" maxW="700px" textAlign="left">
 
           <Text mb={6}>
@@ -152,7 +152,7 @@ const Home = () => {
           <Image src="./assets/Game_Capture_Neo_Lifestyle_Shot_02.jpg" w="100%" maxHeight="550px" borderRadius="lg" />
         </Box>
       </Box>
-      <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="900px" w="100%" mx="auto" py={16} gap={16} >
+      <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="1200px" w="100%" mx="auto" py={16} gap={16} >
         <Box flex="2" fontSize="xl" maxW="700px" textAlign="left">
           <Text mb={6}>
             Elgato Capture brings high-quality game and video recording to the iPad, offering a portable, laptop-free solution for streamers, content creators, and gamers who want to relive their best moments. With support for PlayStation, Xbox, Nintendo Switch, Steam Deck, and more, the app seamlessly integrates with Elgato's capture cards and cameras, enabling professional-grade recording on the go.
@@ -202,7 +202,7 @@ const Home = () => {
           <Image src="./assets/Input_value_helper.png" w="100%" h="auto" borderRadius="lg" />
         </Box>
       </Box>
-      <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="900px" w="100%" mx="auto" py={16} gap={16}>
+      <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="1200px" w="100%" mx="auto" py={16} gap={16}>
         <Box flex="2" fontSize="xl" maxW="700px" textAlign="left">
           <Text mb={{ base: 0, md: 6 }}>
             I worked at GritWorld on GritGene, helping develop their design system and conducting user research to enhance the UX of GritGene, their desktop software. This experience provided valuable insights into designing for advanced graphics and real-time rendering tools. Due to confidentiality, I can't share details but feel free to reach out if you'd like to learn more.

@@ -2,7 +2,7 @@ import { Text, Box, Flex, Heading, Image } from "@chakra-ui/react";
 
 function About() {
   return (
-    <Flex direction={{ base: "column", md: "row" }} p={6} gap={16}>
+    <Flex direction={{ base: "column", md: "row" }} py={6} gap={16}>
       <Box flex="2" mt={{ base: 0, md: 4 }} fontSize="xl">
         <Flex justify={{ base: "center", md: "left" }}>
           <Image src="/design/assets/photo_rb.jpg" boxSize="180px" rounded="lg" mb={8} />

@@ -13,12 +13,11 @@ const Header = () => {
       direction={{ base: "column-reverse", md: "row" }} // Stack on mobile, row on larger screens
       justify="space-between"
       align="center"
-      p={8}
+      py={8}
       bg="white"
       gap={{ base: 8, md: 0 }} // Add spacing on mobile
       maxW="1200px"
       mx="auto"
-      px={4} // Optional: ensures padding on smaller screens
       width="100%"
     >
       {/* Left side - Logo or Title */}
