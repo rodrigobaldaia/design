@@ -25,22 +25,22 @@ function About() {
         <Flex direction={{ base: "column", md: "row" }} gap={{ base: 0, md: 12 }}>
           <Box flex="1">
             <Text mb={4}>
-              User research<br />
-              Usability testing<br />
+              User Research<br />
+              Usability Testing<br />
               Wireframing<br />
-              User flows<br />
               Prototyping<br />
+              Design Systems<br />
             </Text>
 
           </Box>
 
           <Box flex="1">
             <Text mb={4}>
-              Design systems<br />
               Figma<br />
               Adobe Creative Suite<br />
               3D Visualization<br />
-              Git<br />
+              Cursor / v0<br />
+              VS Code / Git<br />
             </Text>
 
           </Box>
@@ -50,7 +50,7 @@ function About() {
               Python<br />
               SQL<br />
               HTML / CSS / JS<br />
-              React/Vite<br />
+              React / Vite<br />
               Jira / Confluence<br />
             </Text>
 
@@ -119,6 +119,32 @@ function About() {
         </Heading>
         <Text mb={8}>
           University of Aveiro, Portugal
+        </Text>
+
+        <Heading as="h1" mb={6} mt={16}>
+          Highlights
+        </Heading>
+
+        <Text color="gray.500">
+          2025
+        </Text>
+
+        <Heading as="h1">
+          prompt:UX Participation
+        </Heading>
+        <Text mb={4}>
+          Berlin, Germany
+        </Text>
+
+        <Text color="gray.500">
+          2024
+        </Text>
+
+        <Heading as="h1" >
+          Figma Config Participation
+        </Heading>
+        <Text mb={8}>
+          San Francisco, USA
         </Text>
 
       </Box>
