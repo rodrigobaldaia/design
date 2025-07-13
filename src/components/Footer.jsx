@@ -24,7 +24,7 @@ const Footer = () => {
   };
 
   return (
-    <Box as="footer" py={6} px={6} bg="white">
+    <Box as="footer" py={8} px={8} bg="white">
       <Flex
         maxW="1200px"
         mx="auto"

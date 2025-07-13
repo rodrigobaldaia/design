@@ -13,7 +13,7 @@ const Home = () => {
   // Show button only when scrolling down
   useEffect(() => {
     const handleScroll = () => {
-      setIsVisible(window.scrollY > 1500); // Adjust value as needed
+      setIsVisible(window.scrollY > 8000); // Adjust value of scrool
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -40,7 +40,7 @@ const Home = () => {
 
   return (
 
-    <Box py={8} my={{ base: "4", lg: "16" }}> {/* Adds padding around the content */}
+    <Box py={8} my={{ base: "4", lg: "16" }} px={{ base: "8", lg: "0" }}> {/* Adds padding around the content */}
       <Text fontSize={{ base: "4xl", md: "5xl", lg: "5xl", xl: "6xl" }} fontWeight={600} textTransform={"uppercase"}>
         UX Designer based in Germany. Currently working at {" "}
         <a
@@ -363,8 +363,8 @@ const Home = () => {
         size="lg"
         onClick={scrollToTop}
         position="fixed"
-        bottom="12" // Spacing from bottom
-        right="16"
+        bottom="10" // Spacing from bottom
+        right="10"
         zIndex="1000" // Ensures it stays on top
         opacity={isVisible ? 1 : 0} // Show only when needed
         transition="opacity 0.3s ease-in-out"
