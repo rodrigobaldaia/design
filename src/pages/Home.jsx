@@ -40,7 +40,7 @@ const Home = () => {
 
   return (
 
-    <Box py={8} my={{ base: "4", lg: "16" }} px={{ base: "8", lg: "0" }}> {/* Adds padding around the content */}
+    <Box py={8} my={{ base: "4", xl: "16" }} px={{ base: "8", xl: "0" }}> {/* Adds padding around the content */}
       <Text fontSize={{ base: "4xl", md: "5xl", lg: "5xl", xl: "6xl" }} fontWeight={600} textTransform={"uppercase"}>
         UX Designer based in Germany. Currently working at {" "}
         <a

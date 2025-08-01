@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { MdLockOutline } from "react-icons/md";
+import React, { useState, useEffect, useRef } from "react";
+import { MdLock, MdLockOpen } from "react-icons/md";
+import { LuCopy } from "react-icons/lu";
 import {
   Box,
   Button,
@@ -11,8 +12,27 @@ import {
   Flex,
   Wrap,
   WrapItem,
+  Center,
+  IconButton,
 } from "@chakra-ui/react";
+import { Toaster, toaster } from "../components/ui/toaster"
 import * as webllm from "@mlc-ai/web-llm";
+import tinycolor from "tinycolor2";
+import { base } from "framer-motion/client";
+import Lottie from 'lottie-react';
+import paletteAnimation from '../assets/paletteAnimation.json';
+import GradientBackground from '../assets/GradientBackground.json';
+
+type GPU = any;
+declare global {
+  interface Navigator {
+    gpu?: GPU;
+  }
+}
+
+function addSpacesToName(name: string): string {
+  return name.replace(/([a-z])([A-Z])/g, '$1 $2').trim();
+}
 
 export default function PaletteGenerator() {
   const [started, setStarted] = useState(false);
@@ -23,11 +43,37 @@ export default function PaletteGenerator() {
   const [palette, setPalette] = useState<string[]>([]);
   const [locked, setLocked] = useState<boolean[]>([]);
   const [paletteName, setPaletteName] = useState("");
+  const [welcomeHeight, setWelcomeHeight] = useState<number | null>(null);
+  const welcomeRef = useRef<HTMLDivElement>(null);
+  const lockedRef = useRef<boolean[]>([]);
+
+
+
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toaster.create({
+        title: `Color ${text} copied to clipboard.`,
+        duration: 2000,
+        closable: false,
+        type: "success",
+      });
+    } catch (err) {
+      toaster.create({
+        title: 'Copy failed!',
+        description: 'Could not copy to clipboard.',
+        duration: 2000,
+        closable: true,
+      });
+      console.error("Failed to copy!", err);
+    }
+  };
+
 
   // Load model when button clicked
   const startLoadingModel = async () => {
     setStarted(true);
-    const eng = await webllm.CreateMLCEngine("Qwen3-1.7B-q4f16_1-MLC", {
+    const eng = await webllm.CreateMLCEngine("Qwen3-0.6B-q4f16_1-MLC", {
       initProgressCallback: (report) => setProgress(report.progress),
     });
     setEngine(eng);
@@ -47,23 +93,26 @@ export default function PaletteGenerator() {
   // Toggle locked
   const toggleFavorite = (index: number) => {
     setLocked((prev) => {
-      const newFav = [...prev];
-      newFav[index] = !newFav[index];
-      return newFav;
+      const newLocked = [...prev];
+      newLocked[index] = !newLocked[index];
+      lockedRef.current = newLocked; // sync ref
+      return newLocked;
     });
+
   };
 
-  // Regenerate palette - kepp locked, randomize rest
+  // Regenerate palette - keep locked, randomize rest
 
   const regenerateNonLocked = () => {
     if (!palette.length) return;
 
     const newColors = palette.map((color, i) =>
-      locked[i] ? randomHexColor() : color
+      lockedRef.current[i] ? color : randomHexColor()
     );
 
     setPalette(newColors);
   };
+
 
 
   // Reset the generator state
@@ -81,17 +130,23 @@ export default function PaletteGenerator() {
 
 
     const prompt = `You are a colour-palette assistant.
-Return ONLY a JSON object with exactly 5 different 6-digit hex codes AND a short creative name.
+Return ONLY a JSON object with exactly 5 different 6-digit hex codes using **principles of color theory** AND a short creative name.
+Choose ONE color theory that best fits the goal: complementary, split‑complementary, triadic, tetradic, analogous, or monochromatic.
 Do NOT include explanations or line breaks.
-Do NOT reuse any example values or placeholders.
+Do NOT reuse any example values or placeholders
+Do NOT include any duplicate colors in the list, #000000 or #FFFFFF.
+
+**Color‑theory constraints**
+- Pick a clear harmony and keep hue relationships consistent with it.
+- Avoid near‑duplicates. Space hues or L values so each color has a distinct role.
 
 Format:
 {
-  "name": "Creative Name",
+  "name": " ",
   "colors": ["#HEX1", "#HEX2", "#HEX3", "#HEX4", "#HEX5"]
 }
 
-Goal: typical colors of ${goal}`;
+Goal: ${goal}`;
 
     const hexRegex = /^#([0-9a-f]{6})$/i;
     let attempts = 0;
@@ -102,16 +157,17 @@ Goal: typical colors of ${goal}`;
       try {
         const { choices } = await engine.chat.completions.create({
           messages: [{ role: "user", content: prompt }],
-          temperature: 0.5,
+          temperature: 0.3,
           stream: false,
         });
 
         const content = choices[0]?.message?.content ?? "";
+        console.log("Model output:", content); // Add this line
         const match = content.match(/\{[\s\S]*?\}/);
         if (!match) throw new Error("no JSON object found");
 
         const data = JSON.parse(match[0]);
-        name = typeof data.name === "string" ? data.name : "";
+        name = typeof data.name === "string" ? addSpacesToName(data.name) : "";
         colors = Array.from(
           new Set(
             (data.colors ?? [])
@@ -136,12 +192,13 @@ Goal: typical colors of ${goal}`;
         const l = 55;
         return hslToHex(h, s, l);
       });
-      name = "Golden Ratio Palette";
+      name = addSpacesToName("GoldenRatioPalette");
     }
 
+    console.log("Final palette:", colors, "Name:", name);
     setPaletteName(name);
     setPalette(colors);
-    setLocked(new Array(colors.length).fill(true));
+    setLocked(new Array(colors.length).fill(false));
     setBusy(false);
   };
 
@@ -168,148 +225,393 @@ Goal: typical colors of ${goal}`;
     return `rgb(${r}, ${g}, ${b})`;
   };
 
+  function isSupportedBrowserOrDevice(): boolean {
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+    const hasWebGPU = typeof navigator.gpu !== "undefined";
+
+    return !isMobile && hasWebGPU;
+  }
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.code === "Space") {
+      e.preventDefault();
+      regenerateNonLocked();
+    }
+  };
+
+  useEffect(() => {
+    if (palette.length === 0) return;
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [palette]);
+
+  useEffect(() => {
+    if (welcomeRef.current && welcomeHeight === null) {
+      const rect = welcomeRef.current.getBoundingClientRect();
+      setWelcomeHeight(rect.height);
+    }
+  }, [welcomeRef.current]);
+
+
+
   return (
-    <VStack maxW="100%" w="100%" pt={6} align={"left"}>
+    <VStack maxW="100%" w="100%" pt={6} px={{ base: 8, xl: 0 }} align={"left"}>
       <Text fontSize="2xl" fontWeight={600}>
-        Color Palette Generator
+        Design smarter palettes
       </Text>
-      <Text fontSize="2xl" fontWeight={400} mb={4} mt={-2} color={"gray.500"}>
-        Generate a unique color palette
+      <Text fontSize="2xl" fontWeight={400} mb={8} mt={-2} color={"gray.500"}>
+        Create color palettes using a local AI model that runs directly in your browser
       </Text>
 
-      <VStack p={12} borderRadius="lg" bg={"gray.100"} w="100%">
-        {!started ? (
-          <>
-            <Text fontSize="xl" textAlign="center" mb={6}>
-              Welcome to the AI Color Palette Generator! <br />
-              This tool uses a small open-source AI model running in your browser. <br />
-              Download size is approx. 500MB. No data leaves your device.
-            </Text>
-            <Button colorScheme="teal" size="lg" onClick={startLoadingModel} maxW={"400px"}>
-              Start Generator
-            </Button>
-          </>
-        ) : !engine ? (
-          <VStack>
-            <Spinner size="xl" />
-            <Text>Loading model... {(progress * 100).toFixed(0)}%</Text>
-          </VStack>
-        ) : (
-          <>
-            {palette.length === 0 && (
+      <Box
+        position="relative"
+        w="100%"
+        borderRadius="lg"
+        borderWidth="2px"
+        borderColor="gray.300"
+        overflow="hidden"
+        p={0}
+        mb={12}
+      >
+        {/* Background Lottie */}
+        {(palette.length === 0 || busy) && (
+          <Box
+            position="absolute"
+            top={0}
+            left={0}
+            w="100%"
+            h="100%"
+            zIndex={0}
+            pointerEvents="none"
+            overflow="hidden"
+          >
+            <Box
+              position="absolute"
+              top="50%"
+              left="50%"
+              transform="translate(-50%, -50%)"
+              w="350%"
+              h="350%"
+            >
+              <Lottie
+                animationData={GradientBackground}
+                loop
+                autoplay
+                style={{
+                  width: '100%',
+                  height: '100%',
+                }}
+              />
+            </Box>
+          </Box>
+        )}
+
+        {/* Foreground content */}
+        <VStack
+          align="start"
+          justify="center"
+          p={{ base: 8, xl: 12 }}
+          w="100%"
+          position="relative"
+          zIndex={1}
+        >
+          {!started ? (
+            isSupportedBrowserOrDevice() ? (
               <>
-                <Input
-                  placeholder="e.g. Calm productivity app"
-                  value={goal}
-                  onChange={(e) => setGoal(e.target.value)}
-                  disabled={busy}
-                  mb={4}
-                  maxW="400px"
-                />
-                <Button
-                  onClick={genPalette}
-                  w="100%"
-                  disabled={!goal.trim() || busy}
-                  loading={busy} // changed `loading` to `isLoading`
-                  loadingText="Generating"
-                  maxW="400px"
-                >
-                  Generate palette
-                </Button>
+                <VStack ref={welcomeRef} align="start" width="100%" gap={8} aspectRatio={1.5} justify="center">
+
+                  <Box
+                    bg="gray.100"          // grey background
+                    borderWidth="1px"
+                    borderColor="gray.300"
+                    borderRadius="lg"
+                    p={{ base: 8, md: 12 }} // padding
+                    boxShadow="sm"
+                    mx="auto"           // center horizontally if width < 100%
+                    w={{ base: "100%", sm: "auto" }}
+                    maxW={{ base: "none", md: "30rem" }}         // match your content width constraint
+                    alignItems={"center"}
+                  >
+                    <VStack gap={8}>
+                      <Text fontSize="lg" fontWeight="bold" gap={2}>
+                      Welcome to the Color Palette Generator
+                    </Text>
+                      <Text fontSize="md" mb={2}>
+                    This tool runs entirely in your browser.
+                    A one-time 500MB model download is required to get started.
+                  </Text>
+
+                  <Button
+                    variant="solid"
+                    onClick={startLoadingModel}>
+                    Start Generating
+                  </Button>
+                    </VStack>
+                  </Box>
+
+                  {/*<Lottie animationData={paletteAnimation} loop autoplay
+                    style={{ width: "100%" }} />*/}
+
+                </VStack>
+
               </>
-            )}
-
-
-            {palette.length > 0 && (
-              <VStack w="100%" align="start">
-                <Text fontWeight="bold" fontSize="2xl">
-                  {paletteName}
+            ) : (
+              <VStack px={{ base: 4, md: 8 }} textAlign="center">
+                <Box w="full" maxW="300px" borderRadius="lg" overflow="hidden">
+                  <img src="/fallback-preview.png" alt="Preview of color palette tool" width="100%" />
+                </Box>
+                <Text fontSize={{ base: "md", md: "lg" }} color="gray.600">
+                  This tool only works on desktop browsers like Chrome or Edge.<br />
+                  Please try again from a supported device.
                 </Text>
+              </VStack>
 
-                {/* Color rectangles */}
-                <Flex w="100%" overflow="hidden" borderRadius="md" h="360px" mt={4} mb={8}>
-                  {palette.map((color, i) => (
+            )
+          ) : !engine ? (
+            <VStack
+              w="100%"
+              justify="center"
+              align="center"
+              gap={8}
+              style={{ height: welcomeHeight ? `${welcomeHeight}px` : "auto" }}
+            >
+              <Box
+                bg="gray.100"          // grey background
+                borderWidth="1px"
+                borderColor="gray.300"
+                borderRadius="lg"
+                p={{ base: 8, md: 12 }} // padding
+                boxShadow="sm"
+                mx="auto"              // center horizontally if width < 100%
+                w={{ base: "100%", sm: "auto" }}
+                maxW={{ base: "none", md: "30rem" }}         // match your content width constraint
+                alignItems={"center"}
+              >
+
+                <Center pb={8} pt={4}>
+                  <Spinner size="xl" />
+                </Center>
+                <VStack gap={2}>
+                  {progress > 0 ? (
+                    <Text fontSize="md" fontWeight="bold">
+                      Initializing model... {(progress * 100).toFixed(0)}%
+                    </Text>
+                  ) : (
+                    <Text fontSize="md" fontWeight="bold" gap={2}>
+                      Initializing model...
+                    </Text>
+                  )}
+
+                  <Text fontSize="sm" color="gray.500" textAlign={"center"}>
+                    Just a moment while we get everything ready.
+                  </Text>
+                </VStack>
+              </Box>
+
+            </VStack>
+          ) : (
+            <>
+              {palette.length === 0 && (
+                <>
+                  <VStack
+                    w="100%"
+                    justify="center"
+                    align="center"
+                    gap={8}
+                    style={{
+                      height: welcomeHeight ? `${welcomeHeight}px` : "auto",
+                      overflow: "hidden",
+                    }}
+                  >
                     <Box
-                      key={`${color}-${i}`}
-                      flex="1"
-                      bg={color}
-                      cursor="pointer"
-                      position="relative"
-                      onClick={() => toggleFavorite(i)}
+                      bg="gray.100"          // grey background
+                      borderWidth="1px"
+                      borderColor="gray.300"
+                      borderRadius="lg"
+                      p={{ base: 8, md: 12 }} // padding
+                      boxShadow="sm"
+                      mx="auto"              // center horizontally if width < 100%
+                      w={{ base: "100%", sm: "auto" }}
+                      maxW={{ base: "20rem", md: "30rem" }}
                     >
-                      {!locked[i] && (
+                      <VStack gap={8} align="start">
+                        <VStack gap={4} align="start">
+                          <Text fontSize={{ base: "md", md: "lg" }} fontWeight="bold" textAlign="start">
+                            Describe the vibe you’re going for
+                          </Text>
+
+                          <Text fontSize={{ base: "sm", md: "md" }} textAlign={{ base: "center", md: "left" }}>
+                            Enter a name, keywords or a HEX code to set the mood.
+                          </Text>
+                        </VStack>
+
+                        <VStack gap={2} align="center" w="100%">
+                          <Input
+                            placeholder="Vibrant Beach Vibe"
+                            value={goal}
+                            onChange={(e) => setGoal(e.target.value)}
+                            disabled={busy}
+                          // Let the container control width; remove maxW here
+                          />
+
+                          <Button
+                            onClick={genPalette}
+                            disabled={!goal.trim() || busy}
+                            loading={busy}
+                            loadingText="Generating"
+                            w="full"
+                          >
+                            Generate Palette
+                          </Button>
+                        </VStack>
+
+                        {busy && palette.length === 0 && (
+                          <Text fontSize="sm" color="gray.500" mt={2} textAlign="center">
+                            Generating your palette… this may take 1–2 minutes depending on your prompt.
+                          </Text>
+                        )}
+                      </VStack>
+                    </Box>
+                  </VStack>
+
+                </>
+              )}
+
+
+              {palette.length > 0 && (
+                <VStack w="100%" align="start">
+                  <Text fontWeight="bold" fontSize="2xl">
+                    {paletteName}
+                  </Text>
+
+                  <Box mt={4} w="100%">
+                    <Text
+                      fontSize="lg"
+                      color="fg.subtle"
+                    >
+                      Press the spacebar to shuffle unlocked colors.
+                    </Text>
+                  </Box>
+
+                  {/* Color rectangles */}
+                  <Flex
+                    w="100%"
+                    direction={{ base: "column", md: "row" }}
+                    overflow="hidden"
+                    borderRadius="md"
+                    h="48vh"
+                    mt={4}
+                    rounded="md"
+                    gap={4}
+                  >
+
+                    {palette.map((color, i) => (
+                      <VStack key={`swatch-${i}`} w="100%" h="100%" gap={4}>
                         <Box
-                          position="absolute"
-                          bottom={8}
-                          left="50%"
-                          transform="translateX(-50%)"
-                          bg="none"
-                          p={2}
-                          borderRadius="full"
+                          flex="1"
+                          bg={color}
+                          cursor="pointer"
+                          position="relative"
+                          className="group"
                           display="flex"
+                          flexDirection="column"
+                          justifyContent="flex-end"
                           alignItems="center"
-                          justifyContent="center"
+                          height="100%"
+                          w={"100%"}
+                          rounded={"md"}
                         >
-                          <MdLockOutline
-                            color="gray.400"
-                            size={24}
+                          {/* Buttons container */}
+                          <VStack
+                            position="absolute"
+                            top={4}
+                            right={4}
+                            gap={2}
+                          >
+                            <IconButton
+                              size="xs"
+                              variant="subtle"
+                              aria-label={locked[i] ? "Unlock color" : "Lock color"}
+                              opacity={locked[i] ? 1 : 0}
+                              _groupHover={locked[i] ? undefined : { opacity: 1 }}
+                              transition="opacity 0.2s"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleFavorite(i);
+                              }}
+                              pointerEvents={locked[i] ? "auto" : "auto"}
+                            >
+                              {locked[i] ? <MdLock /> : <MdLockOpen />}
+                            </IconButton>
+
+                            <IconButton
+                              size="xs"
+                              variant="subtle"
+                              aria-label="Copy color"
+                              opacity={0}
+                              _groupHover={{ opacity: 1 }}
+                              transition="opacity 0.2s"
+                              onClick={() => copyToClipboard(color)}
+                            >
+                              <LuCopy />
+                            </IconButton>
+
+                          </VStack>
+
+                          {/* Color display box */}
+                          <Box
+                            bg={color}
+                            borderRadius="md"
+                            w="100%"
+                            h="100px"
                           />
                         </Box>
-                      )}
-                    </Box>
-                  ))}
-                </Flex>
-
-                {/* List of color values */}
-                <VStack align="start" w="100%">
-                  {palette.map((color, i) => (
-                    <HStack>
-                      <Box
-                        key={i}
-                        w="24px"
-                        h="24px"
-                        borderRadius="full"
-                        bg={color}
-                        border="1px solid #ccc"
-                      >
-                      </Box>
-                      <VStack align={"start"} gap={0}>
-                        <Text fontSize="sm" fontFamily="monospace">{color}</Text>
-                        <Text fontSize="sm" fontFamily="monospace">{hexToRgb(color)}</Text>
+                        <Text
+                          w={"100%"}
+                          fontSize="lg"
+                          color="fg"
+                          px={2}
+                        >
+                          {color}
+                        </Text>
                       </VStack>
-                    </HStack>
-                  ))}
+
+
+                    ))}
+                  </Flex>
                 </VStack>
-              </VStack>
-            )}
+              )}
+
+              {palette.length > 0 && (
+                <Flex w="100%" justifyContent="left" gap={4} mt={8}>
+
+                  <Button
+                    onClick={regenerateNonLocked}
+                    colorScheme="gray"
+                    variant="solid"
+                  >
+                    Shuffle
+                  </Button>
+
+                  <Button
+                    onClick={handleReset}
+                    colorScheme="gray"
+                    variant="ghost"
+                  >
+                    Start Over
+                  </Button>
+
+                </Flex>
+              )}
 
 
-            {palette.length > 0 && (
-              <Flex w="100%" justifyContent="left" gap={4} mt={12}>
-
-                <Button
-                  onClick={regenerateNonLocked}
-                  colorScheme="gray"
-                  variant="solid"
-                >
-                  Shuffle
-                </Button>
-
-                <Button
-                  onClick={handleReset}
-                  colorScheme="gray"
-                  variant="ghost"
-                >
-                  Reset
-                </Button>
-
-              </Flex>
-            )}
-
-
-          </>
-        )}
-      </VStack>
+            </>
+          )}
+        </VStack>
+      </Box>
     </VStack>
   );
 }

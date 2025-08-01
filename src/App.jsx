@@ -5,6 +5,7 @@ import Footer from "./components/Footer";
 import { Flex, Box, Spinner } from "@chakra-ui/react";
 import Home from "./pages/Home"; // Regular import (eager loading)
 import PaletteGenerator from "./components/PaletteGenerator";
+import { Toaster, toaster } from "./components/ui/toaster"
 
 // Lazy load only the About page
 const About = lazy(() => import("./pages/About"));
@@ -16,6 +17,7 @@ function App() {
       
       <Box flex="1">
       <Box maxW="1200px" mx="auto" px={0} py={0}>
+        <Toaster />
         <PaletteGenerator />
         <Routes>
           <Route path="/design/" element={<Home />} />

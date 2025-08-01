@@ -19,6 +19,7 @@ const Header = () => {
       maxW="1200px"
       mx="auto"
       width="100%"
+      px={{ base: "8", xl: "0" }}
     >
       {/* Left side - Logo or Title */}
       <Heading size="2xl">
