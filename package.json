@@ -11,13 +11,12 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
-    "@chakra-ui/icons": "^2.2.4",
-    "@chakra-ui/react": "^3.22.0",
+    "@chakra-ui/react": "^3.24.2",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mlc-ai/web-llm": "^0.2.79",
     "@react-icons/all-files": "^4.1.0",
-    "framer-motion": "^12.23.5",
+    "framer-motion": "^12.23.12",
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.479.0",
     "react": "^19.0.0",

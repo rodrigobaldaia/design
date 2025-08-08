@@ -14,7 +14,6 @@ import {
   WrapItem,
   Center,
   IconButton,
-  Image,
 } from "@chakra-ui/react";
 import { Toaster, toaster } from "../components/ui/toaster"
 import * as webllm from "@mlc-ai/web-llm";
@@ -23,7 +22,6 @@ import { base } from "framer-motion/client";
 import Lottie from 'lottie-react';
 import paletteAnimation from '../assets/paletteAnimation.json';
 import GradientBackground from '../assets/GradientBackground.json';
-import ImageCarousel from "../components/ui/ImageCarousel";
 
 type GPU = any;
 declare global {
@@ -71,10 +69,11 @@ export default function PaletteGenerator() {
     }
   };
 
+
   // Load model when button clicked
   const startLoadingModel = async () => {
     setStarted(true);
-    const eng = await webllm.CreateMLCEngine("TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC", {
+    const eng = await webllm.CreateMLCEngine("Qwen3-0.6B-q4f16_1-MLC", {
       initProgressCallback: (report) => setProgress(report.progress),
     });
     setEngine(eng);
@@ -123,36 +122,6 @@ export default function PaletteGenerator() {
     setLocked([]);
   };
 
-  // Better name using second prompt
-  function getBetterPaletteNameLocally(goal: string): string {
-    const adjectives = [
-      "Vibrant", "Bold", "Tranquil", "Soft", "Lush",
-      "Radiant", "Warm", "Cool", "Moody", "Bright",
-      "Dreamy", "Muted", "Sunny", "Golden", "Icy",
-      "Deep", "Dusty", "Fresh", "Gentle", "Serene"
-    ];
-
-    // Clean and extract valid words from goal
-    const words = goal
-      .split(/\s+/)
-      .map(word =>
-        word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-      )
-      .filter(word =>
-        /^[A-Za-z]+$/.test(word) &&
-        !["Color", "Palette", "The", "And", "Of", "With", "A"].includes(word)
-      );
-
-    const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
-
-    // Use a word from the goal or a fallback noun
-    const noun = words.length > 0
-      ? words[Math.floor(Math.random() * words.length)]
-      : ["Sunset", "Ocean", "Forest", "Lagoon", "Sky", "Twilight"][Math.floor(Math.random() * 6)];
-
-    return `${adjective} ${noun}`;
-  }
-
 
   // Generate palette + name
   const genPalette = async () => {
@@ -160,26 +129,24 @@ export default function PaletteGenerator() {
     setBusy(true);
 
 
-    const prompt = `
+    const prompt = `You are a colour-palette assistant.
+Return ONLY a JSON object with exactly 5 different 6-digit hex codes using **principles of color theory** AND a short creative name.
+Choose ONE color theory that best fits the goal: complementary, split‑complementary, triadic, tetradic, analogous, or monochromatic.
+Do NOT include explanations or line breaks.
+Do NOT reuse any example values or placeholders
+Do NOT include any duplicate colors in the list, #000000 or #FFFFFF.
 
-    Respond ONLY with a JSON object in the following format:
+**Color‑theory constraints**
+- Pick a clear harmony and keep hue relationships consistent with it.
+- Avoid near‑duplicates. Space hues or L values so each color has a distinct role.
 
+Format:
 {
-  "name": "${goal}",
-  "colors": ["#HEX001", "#HEX002", "#HEX003", "#HEX004", "#HEX005"]
+  "name": " ",
+  "colors": ["#HEX1", "#HEX2", "#HEX3", "#HEX4", "#HEX5"]
 }
 
-Return 5 hex values.
-Do not repeat any hex value.
-Each hex must be a unique 6-digit color code.
-Choose the colors based on this theme: "${goal}"
-Return a name for the palette based on this theme:"${goal}".
-
-Rules:
-- Use ONE of the color theories (complementary, split‑complementary, triadic, tetradic, analogous, or monochromatic).
-
-Output only one JSON object.
-`;
+Goal: ${goal}`;
 
     const hexRegex = /^#([0-9a-f]{6})$/i;
     let attempts = 0;
@@ -188,14 +155,12 @@ Output only one JSON object.
 
     while (attempts < 3 && (colors.length !== 5 || !name)) {
       try {
-        console.time("Palette generation");
         const { choices } = await engine.chat.completions.create({
           messages: [{ role: "user", content: prompt }],
-          temperature: 0.5,
+          temperature: 0.3,
           stream: false,
         });
 
-        console.timeEnd("Palette generation");
         const content = choices[0]?.message?.content ?? "";
         console.log("Model output:", content); // Add this line
         const match = content.match(/\{[\s\S]*?\}/);
@@ -230,24 +195,9 @@ Output only one JSON object.
       name = addSpacesToName("GoldenRatioPalette");
     }
 
-    // Ask for better name using second prompt
-    const finalName = getBetterPaletteNameLocally(goal);
-
-
-    console.log("Final palette:", colors, "Name:", finalName);
-    setPaletteName(addSpacesToName(finalName));
-    // Replace #FFFFFF with light grey (e.g., #DDDDDD)
-    // and #000000 with dark grey (e.g., #222222)
-    const sanitizedColors = colors.map((c) => {
-      const color = c.toUpperCase();
-      if (color === "#FFFFFF") return "#DDDDDD";
-      if (color === "#000000") return "#222222";
-      return color;
-    });
-
-    setPalette(sanitizedColors);
-
-
+    console.log("Final palette:", colors, "Name:", name);
+    setPaletteName(name);
+    setPalette(colors);
     setLocked(new Array(colors.length).fill(false));
     setBusy(false);
   };
@@ -313,20 +263,21 @@ Output only one JSON object.
         Design smarter palettes
       </Text>
       <Text fontSize="2xl" fontWeight={400} mb={8} mt={-2} color={"gray.500"}>
-        Create color palettes using AI, all in your browser
+        Create color palettes using a local AI model that runs directly in your browser
       </Text>
 
       <Box
         position="relative"
         w="100%"
         borderRadius="lg"
-        borderWidth={{ base: "0px", xl: "2px" }}
+        borderWidth="2px"
         borderColor="gray.300"
         overflow="hidden"
         p={0}
         mb={12}
       >
-        {(palette.length === 0 || busy) && isSupportedBrowserOrDevice() && (
+        {/* Background Lottie */}
+        {(palette.length === 0 || busy) && (
           <Box
             position="absolute"
             top={0}
@@ -338,7 +289,7 @@ Output only one JSON object.
             overflow="hidden"
           >
             <Box
-              position="relative"
+              position="absolute"
               top="50%"
               left="50%"
               transform="translate(-50%, -50%)"
@@ -349,7 +300,6 @@ Output only one JSON object.
                 animationData={GradientBackground}
                 loop
                 autoplay
-                renderer="svg"
                 style={{
                   width: '100%',
                   height: '100%',
@@ -359,59 +309,67 @@ Output only one JSON object.
           </Box>
         )}
 
-
         {/* Foreground content */}
         <VStack
           align="start"
           justify="center"
-          p={{ base: 0, xl: 12 }}
+          p={{ base: 8, xl: 12 }}
           w="100%"
           position="relative"
           zIndex={1}
         >
-          {(!started && !isSupportedBrowserOrDevice()) ? (
-            <VStack textAlign="center" w="100%" gap={8}>
-              <ImageCarousel />
-              
-              <Text fontSize={{ base: "md", md: "lg" }} color="gray.600" textAlign={"left"}>
-                Switch to a desktop browser like Chrome, Edge, or Firefox to try this tool.
-              </Text>
-            </VStack>
-          ) : !started ? (
-            <VStack
-              ref={welcomeRef}
-              align="start"
-              width="100%"
-              gap={8}
-              aspectRatio={1.5}
-              justify="center"
-            >
-              <Box
-                bg="gray.100"
-                borderWidth="1px"
-                borderColor="gray.300"
-                borderRadius="lg"
-                p={{ base: 8, md: 12 }}
-                boxShadow="sm"
-                mx="auto"
-                w={{ base: "100%", sm: "auto" }}
-                maxW={{ base: "none", md: "30rem" }}
-                alignItems="center"
-              >
-                <VStack gap={6}>
-                  <Text fontSize="lg" fontWeight="bold">
-                    Design starts with the right colors
+          {!started ? (
+            isSupportedBrowserOrDevice() ? (
+              <>
+                <VStack ref={welcomeRef} align="start" width="100%" gap={8} aspectRatio={1.5} justify="center">
+
+                  <Box
+                    bg="gray.100"          // grey background
+                    borderWidth="1px"
+                    borderColor="gray.300"
+                    borderRadius="lg"
+                    p={{ base: 8, md: 12 }} // padding
+                    boxShadow="sm"
+                    mx="auto"           // center horizontally if width < 100%
+                    w={{ base: "100%", sm: "auto" }}
+                    maxW={{ base: "none", md: "30rem" }}         // match your content width constraint
+                    alignItems={"center"}
+                  >
+                    <VStack gap={8}>
+                      <Text fontSize="lg" fontWeight="bold" gap={2}>
+                      Welcome to the Color Palette Generator
+                    </Text>
+                      <Text fontSize="md" mb={2}>
+                    This tool runs entirely in your browser.
+                    A one-time 500MB model download is required to get started.
                   </Text>
-                  <Text fontSize="md" mb={2} textAlign={"center"}>
-                    Welcome! This tool creates color palettes right in your browser.
-                    To get started, you’ll just need a one-time model download.
-                  </Text>
-                  <Button variant="solid" onClick={startLoadingModel}>
-                    Start Creating
+
+                  <Button
+                    variant="solid"
+                    onClick={startLoadingModel}>
+                    Start Generating
                   </Button>
+                    </VStack>
+                  </Box>
+
+                  {/*<Lottie animationData={paletteAnimation} loop autoplay
+                    style={{ width: "100%" }} />*/}
+
                 </VStack>
-              </Box>
-            </VStack>
+
+              </>
+            ) : (
+              <VStack px={{ base: 4, md: 8 }} textAlign="center">
+                <Box w="full" maxW="300px" borderRadius="lg" overflow="hidden">
+                  <img src="/fallback-preview.png" alt="Preview of color palette tool" width="100%" />
+                </Box>
+                <Text fontSize={{ base: "md", md: "lg" }} color="gray.600">
+                  This tool only works on desktop browsers like Chrome or Edge.<br />
+                  Please try again from a supported device.
+                </Text>
+              </VStack>
+
+            )
           ) : !engine ? (
             <VStack
               w="100%"
@@ -421,17 +379,18 @@ Output only one JSON object.
               style={{ height: welcomeHeight ? `${welcomeHeight}px` : "auto" }}
             >
               <Box
-                bg="gray.100"
+                bg="gray.100"          // grey background
                 borderWidth="1px"
                 borderColor="gray.300"
                 borderRadius="lg"
-                p={{ base: 8, md: 12 }}
+                p={{ base: 8, md: 12 }} // padding
                 boxShadow="sm"
-                mx="auto"
-                w={{ base: "100%", sm: "full" }}
-                maxW={{ base: "none", md: "30rem" }}
+                mx="auto"              // center horizontally if width < 100%
+                w={{ base: "100%", sm: "auto" }}
+                maxW={{ base: "none", md: "30rem" }}         // match your content width constraint
                 alignItems={"center"}
               >
+
                 <Center pb={8} pt={4}>
                   <Spinner size="xl" />
                 </Center>
@@ -441,15 +400,17 @@ Output only one JSON object.
                       Initializing model... {(progress * 100).toFixed(0)}%
                     </Text>
                   ) : (
-                    <Text fontSize="md" fontWeight="bold">
+                    <Text fontSize="md" fontWeight="bold" gap={2}>
                       Initializing model...
                     </Text>
                   )}
+
                   <Text fontSize="sm" color="gray.500" textAlign={"center"}>
                     Just a moment while we get everything ready.
                   </Text>
                 </VStack>
               </Box>
+
             </VStack>
           ) : (
             <>
@@ -477,13 +438,13 @@ Output only one JSON object.
                       maxW={{ base: "20rem", md: "30rem" }}
                     >
                       <VStack gap={8} align="start">
-                        <VStack gap={4} align="center" w={"100%"}>
-                          <Text fontSize={{ base: "md", md: "lg" }} fontWeight="bold" textAlign="center">
+                        <VStack gap={4} align="start">
+                          <Text fontSize={{ base: "md", md: "lg" }} fontWeight="bold" textAlign="start">
                             Describe the vibe you’re going for
                           </Text>
 
-                          <Text fontSize={{ base: "sm", md: "md" }} textAlign={{ base: "center", md: "center" }}>
-                            Enter a name or keywords to set the mood
+                          <Text fontSize={{ base: "sm", md: "md" }} textAlign={{ base: "center", md: "left" }}>
+                            Enter a name, keywords or a HEX code to set the mood.
                           </Text>
                         </VStack>
 
@@ -509,7 +470,7 @@ Output only one JSON object.
 
                         {busy && palette.length === 0 && (
                           <Text fontSize="sm" color="gray.500" mt={2} textAlign="center">
-                            Generating your palette… this may take a few seconds.
+                            Generating your palette… this may take 1–2 minutes depending on your prompt.
                           </Text>
                         )}
                       </VStack>
