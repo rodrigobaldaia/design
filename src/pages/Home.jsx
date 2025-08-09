@@ -4,6 +4,7 @@ import { ArrowDown, ArrowUp } from "lucide-react";
 import { RxArrowTopRight } from "react-icons/rx";
 import { MdLockOutline } from "react-icons/md";
 import { useRef, useEffect, useState } from "react";
+import PaletteGenerator from "../components/PaletteGenerator";
 
 
 const Home = () => {
@@ -40,7 +41,7 @@ const Home = () => {
 
   return (
 
-    <Box py={8} my={{ base: "4", xl: "16" }} px={{ base: "8", xl: "0" }}> {/* Adds padding around the content */}
+    <Box py={8} my={{ base: "4", xl: "16" }} px={{ base: "8", xl: "0" }}>
       <Text fontSize={{ base: "4xl", md: "5xl", lg: "5xl", xl: "6xl" }} fontWeight={600} textTransform={"uppercase"}>
         UX Designer based in Germany. Currently working at {" "}
         <a
@@ -63,6 +64,38 @@ const Home = () => {
           See my projects
           <ArrowDown />
         </Button>
+      </Flex>
+      <Box ref={projectsRef} mt={{ base: "16", lg: "32" }} pt={8}>
+        <PaletteGenerator />
+      </Box>
+      <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="1200px" w="100%" mx="auto" py={16} gap={16} >
+        <Box flex="2" fontSize="xl" maxW="700px" textAlign="left">
+
+          <Text mb={6}>
+            This personal project is an AI-powered color palette generator built entirely to run in the browser, 
+            with no server-side processing or API calls. I implemented the tool using React, Chakra UI, and WebLLM
+             to integrate a lightweight open-source large language model (TinyLlama-1.1B) that generates color suggestions based on a 
+             user’s description of a desired “vibe” or theme. The application uses WebGPU to execute the model locally, 
+             ensuring both privacy and zero ongoing hosting costs. 
+          </Text>
+          <Text>
+            On the technical side, I built a client-only architecture with on-demand model loading, 
+            smooth progress tracking, intelligent name generation for the final palette, and color sanitization to improve usability. 
+            A combination of AI-assisted creativity, local algorithms, and user input to generate dynamic, designer-ready color palettes.
+          </Text>
+
+        </Box>
+
+        <Box flex="1" fontSize="xl" textAlign="left">
+
+          <Heading as="h3" mb={2}>
+            Project type
+          </Heading>
+          <Text mb={8}>
+            Personal project
+          </Text>
+        </Box>
+
       </Flex>
 
       <Box ref={projectsRef} mt={{ base: "16", lg: "32" }} pt={8}>
@@ -141,7 +174,7 @@ const Home = () => {
         </video>
       </Box>
 
-      <Box mt={{ base: 16, md: 24 }} pt={8}>
+      <Box mt={{ base: 16, md: 32 }} pt={8}>
         <Text fontSize="2xl" fontWeight={600}>
           Elgato Capture - Play and capture on iPad
         </Text>
@@ -191,7 +224,7 @@ const Home = () => {
         <Image src="./assets/Game_Capture_Neo_Lifestyle_Shot_06.jpg" w="100%" h="auto" aspectRatio={1} objectFit="cover" borderRadius="lg" />
       </Grid>
 
-      <Box mt={{ base: 16, md: 24 }} pt={8}>
+      <Box mt={{ base: 16, md: 32 }} pt={8}>
         <Text fontSize="2xl" fontWeight={600}>
           GritGene
         </Text>

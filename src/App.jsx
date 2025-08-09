@@ -18,7 +18,6 @@ function App() {
       <Box flex="1">
       <Box maxW="1200px" mx="auto" px={0} py={0}>
         <Toaster />
-        <PaletteGenerator />
         <Routes>
           <Route path="/design/" element={<Home />} />
           

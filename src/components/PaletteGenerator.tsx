@@ -18,12 +18,9 @@ import {
 } from "@chakra-ui/react";
 import { Toaster, toaster } from "../components/ui/toaster"
 import * as webllm from "@mlc-ai/web-llm";
-import tinycolor from "tinycolor2";
-import { base } from "framer-motion/client";
 import Lottie from 'lottie-react';
-import paletteAnimation from '../assets/paletteAnimation.json';
 import GradientBackground from '../assets/GradientBackground.json';
-import ImageCarousel from "../components/ui/ImageCarousel";
+
 
 type GPU = any;
 declare global {
@@ -48,6 +45,7 @@ export default function PaletteGenerator() {
   const [welcomeHeight, setWelcomeHeight] = useState<number | null>(null);
   const welcomeRef = useRef<HTMLDivElement>(null);
   const lockedRef = useRef<boolean[]>([]);
+  const supported = isSupportedBrowserOrDevice();
 
 
 
@@ -308,7 +306,7 @@ Output only one JSON object.
 
 
   return (
-    <VStack maxW="100%" w="100%" pt={6} px={{ base: 8, xl: 0 }} align={"left"}>
+    <VStack maxW="100%" w="100%" pt={6} align={"left"}>
       <Text fontSize="2xl" fontWeight={600}>
         Design smarter palettes
       </Text>
@@ -320,13 +318,10 @@ Output only one JSON object.
         position="relative"
         w="100%"
         borderRadius="lg"
-        borderWidth={{ base: "0px", xl: "2px" }}
-        borderColor="gray.300"
         overflow="hidden"
-        p={0}
-        mb={12}
       >
-        {(palette.length === 0 || busy) && isSupportedBrowserOrDevice() && (
+        {/* Background animation */}
+        {(palette.length === 0 || busy) && supported && (
           <Box
             position="absolute"
             top={0}
@@ -344,310 +339,331 @@ Output only one JSON object.
               transform="translate(-50%, -50%)"
               w="350%"
               h="350%"
+              opacity={"60%"}
             >
               <Lottie
                 animationData={GradientBackground}
                 loop
                 autoplay
                 renderer="svg"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                }}
+                style={{ width: "100%", height: "100%" }}
               />
             </Box>
           </Box>
         )}
 
-
         {/* Foreground content */}
-        <VStack
-          align="start"
-          justify="center"
-          p={{ base: 0, xl: 12 }}
-          w="100%"
-          position="relative"
-          zIndex={1}
-        >
-          {(!started && !isSupportedBrowserOrDevice()) ? (
-            <VStack textAlign="center" w="100%" gap={8}>
-              <ImageCarousel />
-              
-              <Text fontSize={{ base: "md", md: "lg" }} color="gray.600" textAlign={"left"}>
-                Switch to a desktop browser like Chrome, Edge, or Firefox to try this tool.
-              </Text>
-            </VStack>
-          ) : !started ? (
-            <VStack
-              ref={welcomeRef}
-              align="start"
-              width="100%"
-              gap={8}
-              aspectRatio={1.5}
-              justify="center"
+        <VStack align="start" justify="center" w="100%" position="relative" zIndex={1}>
+          {/* UNSUPPORTED DEVICE */}
+          {!started && !supported && (
+            <Box w="100%">
+              <VStack textAlign="center" w="100%" gap={{base:4, md:8}}>
+                <Box borderRadius="lg" overflow="hidden" w={"100%"} borderWidth="1px" borderColor="gray.200">
+                  <video width="100%" controls autoPlay loop muted>
+                    <source src="./assets/ToolPreview.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                </Box>
+                <Text fontSize={{ base: "md", md: "lg" }} color="gray.600" textAlign="left" w={"100%"}>
+                  This tool only works in supported desktop browsers. Open this page in Chrome, Edge, or Firefox to try it yourself.
+                </Text>
+              </VStack>
+            </Box>
+          )}
+
+          {/* SUPPORTED DEVICE */}
+          {supported && (
+            <Box w="100%"
+              p={8}
+              borderRadius="lg"
+              borderWidth="2px"
+              borderColor="gray.300"
             >
-              <Box
-                bg="gray.100"
-                borderWidth="1px"
-                borderColor="gray.300"
-                borderRadius="lg"
-                p={{ base: 8, md: 12 }}
-                boxShadow="sm"
-                mx="auto"
-                w={{ base: "100%", sm: "auto" }}
-                maxW={{ base: "none", md: "30rem" }}
-                alignItems="center"
-              >
-                <VStack gap={6}>
-                  <Text fontSize="lg" fontWeight="bold">
-                    Design starts with the right colors
-                  </Text>
-                  <Text fontSize="md" mb={2} textAlign={"center"}>
-                    Welcome! This tool creates color palettes right in your browser.
-                    To get started, you’ll just need a one-time model download.
-                  </Text>
-                  <Button variant="solid" onClick={startLoadingModel}>
-                    Start Creating
-                  </Button>
-                </VStack>
-              </Box>
-            </VStack>
-          ) : !engine ? (
-            <VStack
-              w="100%"
-              justify="center"
-              align="center"
-              gap={8}
-              style={{ height: welcomeHeight ? `${welcomeHeight}px` : "auto" }}
-            >
-              <Box
-                bg="gray.100"
-                borderWidth="1px"
-                borderColor="gray.300"
-                borderRadius="lg"
-                p={{ base: 8, md: 12 }}
-                boxShadow="sm"
-                mx="auto"
-                w={{ base: "100%", sm: "full" }}
-                maxW={{ base: "none", md: "30rem" }}
-                alignItems={"center"}
-              >
-                <Center pb={8} pt={4}>
-                  <Spinner size="xl" />
-                </Center>
-                <VStack gap={2}>
-                  {progress > 0 ? (
-                    <Text fontSize="md" fontWeight="bold">
-                      Initializing model... {(progress * 100).toFixed(0)}%
-                    </Text>
-                  ) : (
-                    <Text fontSize="md" fontWeight="bold">
-                      Initializing model...
-                    </Text>
-                  )}
-                  <Text fontSize="sm" color="gray.500" textAlign={"center"}>
-                    Just a moment while we get everything ready.
-                  </Text>
-                </VStack>
-              </Box>
-            </VStack>
-          ) : (
-            <>
-              {palette.length === 0 && (
-                <>
-                  <VStack
-                    w="100%"
-                    justify="center"
-                    align="center"
-                    gap={8}
-                    style={{
-                      height: welcomeHeight ? `${welcomeHeight}px` : "auto",
-                      overflow: "hidden",
-                    }}
+
+              {!started ? (
+                <VStack
+                  ref={welcomeRef}
+                  align="start"
+                  width="100%"
+                  gap={8}
+                  aspectRatio={1.5}
+                  justify="center"
+                >
+                  <Box
+                    bg="gray.100"
+                    borderWidth="1px"
+                    borderColor="gray.300"
+                    borderRadius="lg"
+                    p={{ base: 8, md: 12 }}
+                    boxShadow="sm"
+                    mx="auto"
+                    w={{ base: "100%", sm: "auto" }}
+                    maxW={{ base: "none", md: "30rem" }}
+                    alignItems="center"
                   >
-                    <Box
-                      bg="gray.100"          // grey background
-                      borderWidth="1px"
-                      borderColor="gray.300"
-                      borderRadius="lg"
-                      p={{ base: 8, md: 12 }} // padding
-                      boxShadow="sm"
-                      mx="auto"              // center horizontally if width < 100%
-                      w={{ base: "100%", sm: "auto" }}
-                      maxW={{ base: "20rem", md: "30rem" }}
-                    >
-                      <VStack gap={8} align="start">
-                        <VStack gap={4} align="center" w={"100%"}>
-                          <Text fontSize={{ base: "md", md: "lg" }} fontWeight="bold" textAlign="center">
-                            Describe the vibe you’re going for
-                          </Text>
+                    <VStack gap={6}>
+                      <Text fontSize="lg" fontWeight="bold" textAlign={"center"}>
+                        Design starts with the right colors
+                      </Text>
+                      <Text fontSize="md" mb={2} textAlign={"center"}>
+                        Welcome! This tool creates color palettes right in your browser.
+                        To get started, you’ll just need a one-time model download.
+                      </Text>
+                      <Button variant="solid" onClick={startLoadingModel}>
+                        Start Creating
+                      </Button>
+                    </VStack>
+                  </Box>
+                </VStack>
+              ) : !engine ? (
+                <VStack
+                  w="100%"
+                  justify="center"
+                  align="center"
+                  gap={8}
+                  style={{ height: welcomeHeight ? `${welcomeHeight}px` : "auto" }}
+                >
+                  <Box
+                    bg="gray.100"
+                    borderWidth="1px"
+                    borderColor="gray.300"
+                    borderRadius="lg"
+                    p={{ base: 8, md: 12 }}
+                    boxShadow="sm"
+                    mx="auto"
+                    w={{ base: "100%", sm: "full" }}
+                    maxW={{ base: "none", md: "30rem" }}
+                    alignItems={"center"}
+                  >
+                    <Center pb={8} pt={4}>
+                      <Spinner size="xl" />
+                    </Center>
+                    <VStack gap={2}>
+                      {progress > 0 ? (
+                        <Text fontSize="md" fontWeight="bold">
+                          Initializing model... {(progress * 100).toFixed(0)}%
+                        </Text>
+                      ) : (
+                        <Text fontSize="md" fontWeight="bold">
+                          Initializing model...
+                        </Text>
+                      )}
+                      <Text fontSize="sm" color="gray.500" textAlign={"center"}>
+                        Just a moment while we get everything ready.
+                      </Text>
+                    </VStack>
+                  </Box>
+                </VStack>
+              ) : (
+                <>
+                  {palette.length === 0 && (
+                    <>
+                      <VStack
+                        w="100%"
+                        justify="center"
+                        align="center"
+                        gap={8}
+                        style={{
+                          height: welcomeHeight ? `${welcomeHeight}px` : "auto",
+                          overflow: "hidden",
+                        }}
+                      >
+                        <Box
+                          bg="gray.100"          // grey background
+                          borderWidth="1px"
+                          borderColor="gray.300"
+                          borderRadius="lg"
+                          p={{ base: 8, md: 12 }} // padding
+                          boxShadow="sm"
+                          mx="auto"              // center horizontally if width < 100%
+                          w={{ base: "100%", sm: "auto" }}
+                          maxW={{ base: "20rem", md: "30rem" }}
+                        >
+                          <VStack gap={8} align="start">
+                            <VStack gap={4} align="center" w={"100%"}>
+                              <Text fontSize={{ base: "md", md: "lg" }} fontWeight="bold" textAlign="center">
+                                Describe the vibe you’re going for
+                              </Text>
 
-                          <Text fontSize={{ base: "sm", md: "md" }} textAlign={{ base: "center", md: "center" }}>
-                            Enter a name or keywords to set the mood
-                          </Text>
-                        </VStack>
+                              <Text fontSize={{ base: "sm", md: "md" }} textAlign={{ base: "center", md: "center" }}>
+                                Enter a name or keywords to set the mood
+                              </Text>
+                            </VStack>
 
-                        <VStack gap={2} align="center" w="100%">
-                          <Input
-                            placeholder="Vibrant Beach Vibe"
-                            value={goal}
-                            onChange={(e) => setGoal(e.target.value)}
-                            disabled={busy}
-                          // Let the container control width; remove maxW here
-                          />
+                            <VStack gap={2} align="center" w="100%">
+                              <Input
+                                placeholder="Vibrant Beach Vibe"
+                                value={goal}
+                                onChange={(e) => setGoal(e.target.value)}
+                                disabled={busy}
+                              // Let the container control width; remove maxW here
+                              />
 
-                          <Button
-                            onClick={genPalette}
-                            disabled={!goal.trim() || busy}
-                            loading={busy}
-                            loadingText="Generating"
-                            w="full"
-                          >
-                            Generate Palette
-                          </Button>
-                        </VStack>
+                              <Button
+                                onClick={genPalette}
+                                disabled={!goal.trim() || busy}
+                                loading={busy}
+                                loadingText="Generating"
+                                w="full"
+                              >
+                                Generate Palette
+                              </Button>
+                            </VStack>
 
-                        {busy && palette.length === 0 && (
-                          <Text fontSize="sm" color="gray.500" mt={2} textAlign="center">
-                            Generating your palette… this may take a few seconds.
-                          </Text>
-                        )}
+                            {busy && palette.length === 0 && (
+                              <Text fontSize="sm" color="gray.500" mt={2} textAlign="center">
+                                Generating your palette… this may take a few seconds.
+                              </Text>
+                            )}
+                          </VStack>
+                        </Box>
                       </VStack>
-                    </Box>
-                  </VStack>
+
+                    </>
+                  )}
+
+
+                  {palette.length > 0 && (
+                    <VStack w="100%" align="start">
+                      <Text fontWeight="bold" fontSize="2xl">
+                        {paletteName}
+                      </Text>
+
+                      <Box mt={4} w="100%">
+                        <Text
+                          fontSize="lg"
+                          color="fg.subtle"
+                        >
+                          Press the spacebar to shuffle unlocked colors.
+                        </Text>
+                      </Box>
+
+                      {/* Color rectangles */}
+                      <Flex
+                        w="100%"
+                        direction={{ base: "column", md: "row" }}
+                        overflow="hidden"
+                        borderRadius="md"
+                        h="48vh"
+                        mt={4}
+                        rounded="md"
+                        gap={4}
+                        flexWrap="nowrap"
+                        align="stretch"
+                      >
+
+                        {palette.map((color, i) => (
+                          <VStack
+                            key={`swatch-${i}`}
+                            w="100%"
+                            h="100%"
+                            flex="1 1 0"
+                            minH={0}
+                            gap={{ base: "2", md: "4" }}
+                            align="stretch"
+                          >
+                            <Box
+                              flex="1"
+                              bg={color}
+                              cursor="pointer"
+                              position="relative"
+                              className="group"
+                              display="flex"
+                              flexDirection="column"
+                              justifyContent="flex-end"
+                              alignItems="center"
+                              rounded="md"
+                              w="100%"
+                              minH={0}
+                            >
+                              {/* Buttons container */}
+                              <VStack
+                                position="absolute"
+                                top={4}
+                                right={4}
+                                gap={2}
+                              >
+                                <IconButton
+                                  size="xs"
+                                  variant="subtle"
+                                  aria-label={locked[i] ? "Unlock color" : "Lock color"}
+                                  opacity={locked[i] ? 1 : 0}
+                                  _groupHover={locked[i] ? undefined : { opacity: 1 }}
+                                  transition="opacity 0.2s"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    toggleFavorite(i);
+                                  }}
+                                  pointerEvents={locked[i] ? "auto" : "auto"}
+                                >
+                                  {locked[i] ? <MdLock /> : <MdLockOpen />}
+                                </IconButton>
+
+                                <IconButton
+                                  size="xs"
+                                  variant="subtle"
+                                  aria-label="Copy color"
+                                  opacity={0}
+                                  _groupHover={{ opacity: 1 }}
+                                  transition="opacity 0.2s"
+                                  onClick={() => copyToClipboard(color)}
+                                >
+                                  <LuCopy />
+                                </IconButton>
+
+                              </VStack>
+
+                              {/* Color display box */}
+                              <Box
+                                bg={color}
+                                borderRadius="md"
+                                w="100%"
+                                h="100px"
+                              />
+                            </Box>
+                            <Text
+                              w={"100%"}
+                              fontSize="lg"
+                              color="fg"
+                              px={2}
+                              flexShrink={0}
+                            >
+                              {color}
+                            </Text>
+                          </VStack>
+
+
+                        ))}
+                      </Flex>
+                    </VStack>
+                  )}
+
+                  {palette.length > 0 && (
+                    <Flex w="100%" justifyContent="left" gap={4} mt={8}>
+
+                      <Button
+                        onClick={regenerateNonLocked}
+                        colorScheme="gray"
+                        variant="solid"
+                      >
+                        Shuffle
+                      </Button>
+
+                      <Button
+                        onClick={handleReset}
+                        colorScheme="gray"
+                        variant="ghost"
+                      >
+                        Start Over
+                      </Button>
+
+                    </Flex>
+                  )}
+
 
                 </>
               )}
-
-
-              {palette.length > 0 && (
-                <VStack w="100%" align="start">
-                  <Text fontWeight="bold" fontSize="2xl">
-                    {paletteName}
-                  </Text>
-
-                  <Box mt={4} w="100%">
-                    <Text
-                      fontSize="lg"
-                      color="fg.subtle"
-                    >
-                      Press the spacebar to shuffle unlocked colors.
-                    </Text>
-                  </Box>
-
-                  {/* Color rectangles */}
-                  <Flex
-                    w="100%"
-                    direction={{ base: "column", md: "row" }}
-                    overflow="hidden"
-                    borderRadius="md"
-                    h="48vh"
-                    mt={4}
-                    rounded="md"
-                    gap={4}
-                  >
-
-                    {palette.map((color, i) => (
-                      <VStack key={`swatch-${i}`} w="100%" h="100%" gap={4}>
-                        <Box
-                          flex="1"
-                          bg={color}
-                          cursor="pointer"
-                          position="relative"
-                          className="group"
-                          display="flex"
-                          flexDirection="column"
-                          justifyContent="flex-end"
-                          alignItems="center"
-                          height="100%"
-                          w={"100%"}
-                          rounded={"md"}
-                        >
-                          {/* Buttons container */}
-                          <VStack
-                            position="absolute"
-                            top={4}
-                            right={4}
-                            gap={2}
-                          >
-                            <IconButton
-                              size="xs"
-                              variant="subtle"
-                              aria-label={locked[i] ? "Unlock color" : "Lock color"}
-                              opacity={locked[i] ? 1 : 0}
-                              _groupHover={locked[i] ? undefined : { opacity: 1 }}
-                              transition="opacity 0.2s"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                toggleFavorite(i);
-                              }}
-                              pointerEvents={locked[i] ? "auto" : "auto"}
-                            >
-                              {locked[i] ? <MdLock /> : <MdLockOpen />}
-                            </IconButton>
-
-                            <IconButton
-                              size="xs"
-                              variant="subtle"
-                              aria-label="Copy color"
-                              opacity={0}
-                              _groupHover={{ opacity: 1 }}
-                              transition="opacity 0.2s"
-                              onClick={() => copyToClipboard(color)}
-                            >
-                              <LuCopy />
-                            </IconButton>
-
-                          </VStack>
-
-                          {/* Color display box */}
-                          <Box
-                            bg={color}
-                            borderRadius="md"
-                            w="100%"
-                            h="100px"
-                          />
-                        </Box>
-                        <Text
-                          w={"100%"}
-                          fontSize="lg"
-                          color="fg"
-                          px={2}
-                        >
-                          {color}
-                        </Text>
-                      </VStack>
-
-
-                    ))}
-                  </Flex>
-                </VStack>
-              )}
-
-              {palette.length > 0 && (
-                <Flex w="100%" justifyContent="left" gap={4} mt={8}>
-
-                  <Button
-                    onClick={regenerateNonLocked}
-                    colorScheme="gray"
-                    variant="solid"
-                  >
-                    Shuffle
-                  </Button>
-
-                  <Button
-                    onClick={handleReset}
-                    colorScheme="gray"
-                    variant="ghost"
-                  >
-                    Start Over
-                  </Button>
-
-                </Flex>
-              )}
-
-
-            </>
+            </Box>
           )}
         </VStack>
       </Box>

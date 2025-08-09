@@ -15,7 +15,7 @@ import {
   Center,
   IconButton,
 } from "@chakra-ui/react";
-import { Toaster, toaster } from "../components/ui/toaster"
+import { Toaster, toaster } from "./ui/toaster"
 import * as webllm from "@mlc-ai/web-llm";
 import tinycolor from "tinycolor2";
 import { base } from "framer-motion/client";
