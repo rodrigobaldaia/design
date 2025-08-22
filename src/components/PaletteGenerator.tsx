@@ -124,10 +124,45 @@ export default function PaletteGenerator() {
   // Better name using second prompt
   function getBetterPaletteNameLocally(goal: string): string {
     const adjectives = [
-      "Vibrant", "Bold", "Tranquil", "Soft", "Lush",
-      "Radiant", "Warm", "Cool", "Moody", "Bright",
-      "Dreamy", "Muted", "Sunny", "Golden", "Icy",
-      "Deep", "Dusty", "Fresh", "Gentle", "Serene"
+      // Energetic & Bold
+  "Vibrant", "Bold", "Radiant", "Dynamic", "Electric",
+  "Fiery", "Striking", "Lively", "Dazzling", "Intense",
+  "Vivid", "Brilliant", "Punchy", "Spirited", "Dramatic",
+
+  // Calm & Tranquil
+  "Tranquil", "Peaceful", "Serene", "Gentle", "Soothing",
+  "Mellow", "Balanced", "Delicate", "Light", "Tender",
+  "Airy", "Subtle", "Graceful", "Quiet", "Pastel",
+
+  // Nature-Inspired
+  "Lush", "Earthy", "Fresh", "Botanical", "Woody",
+  "Floral", "Rustic", "Natural", "Breezy", "Wild",
+  "Misty", "Oceanic", "Forest", "Meadow", "Desert",
+
+  // Warm & Cozy
+  "Warm", "Golden", "Sunny", "Glowing", "Fiery",
+  "Toasty", "Amber", "Honeyed", "Rusty", "Crimson",
+  "Cozy", "Candlelit", "Autumnal", "Hearty", "Inviting",
+
+  // Cool & Icy
+  "Cool", "Icy", "Chilly", "Frosted", "Crystal",
+  "Arctic", "Snowy", "Silvery", "Glacial", "Azure",
+  "Wintry", "Polar", "Frozen", "Shimmery", "Moonlit",
+
+  // Dark & Moody
+  "Moody", "Dusky", "Stormy", "Shadowy", "Mystic",
+  "Velvety", "Smoky", "Obsidian", "Twilight", "Deep",
+  "Nocturnal", "Midnight", "Dusk", "Enigmatic", "Gothic",
+
+  // Playful & Dreamy
+  "Dreamy", "Whimsical", "Playful", "Cheerful", "Sparkling",
+  "Candy", "Magical", "Ethereal", "Soft", "Sweet",
+  "Fairy", "Cloudy", "Iridescent", "Fantasy", "Charming",
+
+  // Modern & Sleek
+  "Muted", "Dusty", "Minimal", "Neutral", "Refined",
+  "Polished", "Clean", "Elegant", "Smooth", "Sophisticated",
+  "Classic", "Timeless", "Modern", "Chic", "Balanced"
     ];
 
     // Clean and extract valid words from goal
@@ -159,24 +194,23 @@ export default function PaletteGenerator() {
 
 
     const prompt = `
-
-    Respond ONLY with a JSON object in the following format:
+Respond ONLY with a valid JSON object in exactly this format:
 
 {
-  "name": "${goal}",
-  "colors": ["#HEX001", "#HEX002", "#HEX003", "#HEX004", "#HEX005"]
+  "name": "<palette name based on the theme '${goal}'>",
+  "colors": ["#RRGGBB", "#RRGGBB", "#RRGGBB", "#RRGGBB", "#RRGGBB"]
 }
 
-Return 5 hex values.
-Do not repeat any hex value.
-Each hex must be a unique 6-digit color code.
-Choose the colors based on this theme: "${goal}"
-Return a name for the palette based on this theme:"${goal}".
-
-Rules:
-- Use ONE of the color theories (complementary, split‑complementary, triadic, tetradic, analogous, or monochromatic).
-
-Output only one JSON object.
+Requirements:
+- "name" must be a short, creative palette name related to "${goal}".
+- "colors" must contain exactly 5 unique hex color codes in 6-digit uppercase format (#RRGGBB).
+- Do not repeat any hex value.
+- Do not use pure black (#000000), pure white (#FFFFFF), or pure red (#FF0000).
+- Avoid common "default" values (like #808080, #C0C0C0, #00FF00, #0000FF).
+- Colors must clearly reflect the theme "${goal}".
+- Select colors using ONE color theory: complementary, split-complementary, triadic, tetradic, analogous, or monochromatic.
+- Do not output color names, explanations, or comments.
+- Output must be valid JSON with no extra text before or after.
 `;
 
     const hexRegex = /^#([0-9a-f]{6})$/i;
@@ -184,12 +218,12 @@ Output only one JSON object.
     let colors: string[] = [];
     let name = "";
 
-    while (attempts < 3 && (colors.length !== 5 || !name)) {
+    while (attempts < 2 && (colors.length !== 5 || !name)) {
       try {
         console.time("Palette generation");
         const { choices } = await engine.chat.completions.create({
           messages: [{ role: "user", content: prompt }],
-          temperature: 0.5,
+          temperature: 0.2,
           stream: false,
         });
 
@@ -238,8 +272,8 @@ Output only one JSON object.
     // and #000000 with dark grey (e.g., #222222)
     const sanitizedColors = colors.map((c) => {
       const color = c.toUpperCase();
-      if (color === "#FFFFFF") return "#DDDDDD";
-      if (color === "#000000") return "#222222";
+      if (color === "#FFFFFF") return "#F4FCFB";
+      if (color === "#000000") return "#273B56";
       return color;
     });
 
@@ -306,14 +340,7 @@ Output only one JSON object.
 
 
   return (
-    <VStack maxW="100%" w="100%" pt={6} align={"left"}>
-      <Text fontSize="2xl" fontWeight={600}>
-        Design smarter palettes
-      </Text>
-      <Text fontSize="2xl" fontWeight={400} mb={8} mt={-2} color={"gray.500"}>
-        Create color palettes using AI, all in your browser
-      </Text>
-
+    <VStack maxW="100%" w="100%" align={"left"}>
       <Box
         position="relative"
         w="100%"
@@ -357,15 +384,15 @@ Output only one JSON object.
           {/* UNSUPPORTED DEVICE */}
           {!started && !supported && (
             <Box w="100%">
-              <VStack textAlign="center" w="100%" gap={{base:4, md:8}}>
+              <VStack textAlign="center" w="100%" gap={{ base: 4, md: 8 }}>
                 <Box borderRadius="lg" overflow="hidden" w={"100%"} borderWidth="1px" borderColor="gray.200">
-                  <video width="100%" controls autoPlay loop muted>
+                  <video width="100%" autoPlay loop muted>
                     <source src="./assets/ToolPreview.mp4" type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 </Box>
                 <Text fontSize={{ base: "md", md: "lg" }} color="gray.600" textAlign="left" w={"100%"}>
-                  This tool only works in supported desktop browsers. Open this page in Chrome, Edge, or Firefox to try it yourself.
+                  Oops! This tool is available only in supported desktop browsers. Please use Chrome, Edge, or Firefox to try it.
                 </Text>
               </VStack>
             </Box>
@@ -544,7 +571,7 @@ Output only one JSON object.
                         direction={{ base: "column", md: "row" }}
                         overflow="hidden"
                         borderRadius="md"
-                        h="48vh"
+                        h="40vh"
                         mt={4}
                         rounded="md"
                         gap={4}
@@ -574,7 +601,7 @@ Output only one JSON object.
                               alignItems="center"
                               rounded="md"
                               w="100%"
-                              minH={0}
+                              minH={"8rem"}
                             >
                               {/* Buttons container */}
                               <VStack

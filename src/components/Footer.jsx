@@ -1,11 +1,12 @@
 "use client"
 
-import { Box, Flex, IconButton, Link, HStack, Heading } from "@chakra-ui/react";
+import { Box, Button, Flex, IconButton, Text, Link, HStack, Heading } from "@chakra-ui/react";
 import { ArrowUp } from "lucide-react";
 import { FaLinkedin } from "@react-icons/all-files/fa/FaLinkedin";
 import { RxArrowTopRight } from "react-icons/rx";
 import { LuCopy } from "react-icons/lu";
 import { useState } from "react";
+import { Toaster, toaster } from "../components/ui/toaster"
 
 const Footer = () => {
   const [copied, setCopied] = useState(false);
@@ -23,10 +24,20 @@ const Footer = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const copyToClipboard = async () => {
+    navigator.clipboard.writeText(email);
+    toaster.create({
+      title: `Copied to clipboard.`,
+      duration: 2000,
+      closable: false,
+      type: "success",
+    });
+  };
+
   return (
     <Box as="footer" py={8} px={{ base: "8", xl: "0" }} bg="white">
       <Flex
-        maxW="1200px"
+        maxW="1240px"
         mx="auto"
         justify="space-between"
         align="left"
@@ -39,34 +50,31 @@ const Footer = () => {
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          <Link 
-          onClick={handleCopy}
+          <Link
+            onClick={() => copyToClipboard(email)}
           >{copied ? "Email copied!" : email}</Link>
           {isHovered && (
             <LuCopy />
-            
+
           )}
         </HStack>
 
         {/* Mobile: Show a full button with email + clipboard icon + Linkedin */}
-        <Flex direction="column" display={{ base: "flex", md: "none" }} gap={2} fontSize="md">
+        <Flex direction="column" display={{ base: "flex", md: "none" }} gap={2} mt={8} fontSize="md">
           <Heading as="h1" fontWeight="semibold">
             Contact
           </Heading>
-          
-          <Link
-            aria-label="Copy email"
+
+          <Text
             w="fit-content"
-            onClick={handleCopy}
-            gap={2}
           >
-            {copied ? "Email copied!" : email}
-            <LuCopy />
-          </Link>
+            {email}
+          </Text>
+
 
           <Link href="https://www.linkedin.com/in/rodrigobaldaia/" target="_blank">
-          Linkedin
-          <RxArrowTopRight />
+            Linkedin
+            <RxArrowTopRight />
           </Link>
 
         </Flex>

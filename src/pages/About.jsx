@@ -2,8 +2,8 @@ import { Text, Box, Flex, Heading, Image } from "@chakra-ui/react";
 
 function About() {
   return (
-    <Flex direction={{ base: "column", md: "row" }} py={6} gap={16} px={{ base: "8", lg: "0" }}>
-      <Box flex="2" mt={{ base: 0, md: 4 }} fontSize="xl">
+    <Flex direction={{ base: "column", md: "row" }} py={6} gap={16} px={{ base: "8", xl: "0" }}>
+      <Box flex="2" mt={{ base: 0, xl: 4 }} fontSize="xl">
         <Flex justify={{ base: "center", md: "left" }}>
           <Image src="/design/assets/photo_rb.jpg" boxSize="180px" rounded="lg" mb={8} />
         </Flex>
@@ -95,7 +95,7 @@ function About() {
           Graphic Designer
         </Text>
 
-        <Heading as="h1" mb={6} mt={16}>
+        <Heading as="h1" mb={6} mt={12}>
           Education
         </Heading>
 
@@ -121,7 +121,7 @@ function About() {
           University of Aveiro, Portugal
         </Text>
 
-        <Heading as="h1" mb={6} mt={16}>
+        <Heading as="h1" mb={6} mt={12}>
           Highlights
         </Heading>
 

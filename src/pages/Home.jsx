@@ -1,10 +1,11 @@
-import { useLocation } from "react-router-dom";
-import { Text, Box, Button, Image, Flex, Heading, Grid, IconButton, Tabs, Link } from "@chakra-ui/react";
-import { ArrowDown, ArrowUp } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Text, Box, Button, Image, Flex, Heading, Grid, IconButton, Tabs, Link, VStack } from "@chakra-ui/react";
+import { ArrowDown, ArrowUp, ArrowRight } from "lucide-react";
 import { RxArrowTopRight } from "react-icons/rx";
 import { MdLockOutline } from "react-icons/md";
 import { useRef, useEffect, useState } from "react";
 import PaletteGenerator from "../components/PaletteGenerator";
+import { vh } from "framer-motion";
 
 
 const Home = () => {
@@ -14,7 +15,7 @@ const Home = () => {
   // Show button only when scrolling down
   useEffect(() => {
     const handleScroll = () => {
-      setIsVisible(window.scrollY > 8000); // Adjust value of scrool
+      setIsVisible(window.scrollY > 4500); // Adjust value of scrool
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -39,102 +40,102 @@ const Home = () => {
     }
   }, [location]);
 
+  let navigate = useNavigate();
+
   return (
 
-    <Box py={8} my={{ base: "4", xl: "16" }} px={{ base: "8", xl: "0" }}>
-      <Text fontSize={{ base: "4xl", md: "5xl", lg: "5xl", xl: "6xl" }} fontWeight={600} textTransform={"uppercase"}>
-        UX Designer based in Germany. Currently working at {" "}
-        <a
-          href="https://elgato.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: "black", textDecoration: "underline" }}
-        >
-          Elgato
-        </a>, a division of CORSAIR. Previously at Bosch.
-      </Text>
+    <Box my={{ base: "0", md: "0" }} px={{ base: "8", xl: "0" }}>
+      <Box
+        minH={{ base: "calc(100vh - 256px)", xl: "calc(100vh - 112px)" }}
+        display="flex"
+        flexDirection="column"
+        px={{ base: "8", xl: "0" }}
+        gap="2rem"
+      >
+        <VStack p={{ base: 8, xl: 0 }}>
+          {/* Header for mobile only */}
+          <Heading
+            size="2xl"
+            display={{ base: "block", md: "none" }}
+            width={"100%"}
+            textAlign={"center"}
+          >
+            Rodrigo Baldaia.</Heading>
+        </VStack>
 
-      <Flex justify="center" mt={{ base: "20", lg: "24" }} display={{ base: "none", md: "flex" }}>
-        <Button
-          onClick={scrollToProjects}
-          variant="outline"
-          size="lg"
-          rounded="full"
-        >
-          See my projects
-          <ArrowDown />
-        </Button>
-      </Flex>
-      <Box ref={projectsRef} mt={{ base: "16", lg: "32" }} pt={8}>
-        <PaletteGenerator />
+        {/* Centered text container */}
+        <Flex flex="1" align="center" justify="center">
+
+          <Text
+            fontSize={"clamp(2rem, 5vw, 4.5rem)"}
+            fontWeight={600}
+            textTransform="uppercase"
+            textAlign={{ base: "center", xl: "left" }}
+          >
+            UX Designer based in Germany. Currently working at{" "}
+            <a
+              href="https://elgato.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "black", textDecoration: "underline" }}
+            >
+              Elgato
+            </a>
+            , a division of CORSAIR.
+            <br />Previously at Bosch.
+          </Text>
+        </Flex>
+
+        {/* Button fixed at bottom */}
+        <Box pb={{ base: 0, xl: 8 }} textAlign="center">
+          <Button
+            onClick={scrollToProjects}
+            variant="outline"
+            size="lg"
+            rounded="full"
+          >
+            See my projects
+            <ArrowDown />
+          </Button>
+        </Box>
       </Box>
-      <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="1200px" w="100%" mx="auto" py={16} gap={16} >
-        <Box flex="2" fontSize="xl" maxW="700px" textAlign="left">
 
-          <Text mb={6}>
-            This personal project is an AI-powered color palette generator built entirely to run in the browser, 
-            with no server-side processing or API calls. I implemented the tool using React, Chakra UI, and WebLLM
-             to integrate a lightweight open-source large language model (TinyLlama-1.1B) that generates color suggestions based on a 
-             user’s description of a desired “vibe” or theme. The application uses WebGPU to execute the model locally, 
-             ensuring both privacy and zero ongoing hosting costs. 
-          </Text>
-          <Text>
-            On the technical side, I built a client-only architecture with on-demand model loading, 
-            smooth progress tracking, intelligent name generation for the final palette, and color sanitization to improve usability. 
-            A combination of AI-assisted creativity, local algorithms, and user input to generate dynamic, designer-ready color palettes.
-          </Text>
-
-        </Box>
-
-        <Box flex="1" fontSize="xl" textAlign="left">
-
-          <Heading as="h3" mb={2}>
-            Project type
-          </Heading>
-          <Text mb={8}>
-            Personal project
-          </Text>
-        </Box>
-
-      </Flex>
-
-      <Box ref={projectsRef} mt={{ base: "16", lg: "32" }} pt={8}>
+      <Box ref={projectsRef} pt={{ base: "32", md: "40" }}>
         <Text fontSize="2xl" fontWeight={600}>
-          Elgato Wave Link - Pro audio for everyone
+          Wave Link - Pro audio for everyone
         </Text>
         <Text fontSize="2xl" fontWeight={400} mb={8} color={"gray.500"}>
           macOS & Windows
         </Text>
         <Box borderRadius="lg" overflow="hidden" >
-          <video width="100%" controls autoPlay loop>
-            <source src="./assets/WaveLink20Video_02.mp4" type="video/mp4" />
+          <video width="100%" autoPlay loop>
+            <source src="./assets/WaveLink20_VoiceFocus.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </Box>
       </Box>
-      <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="1200px" w="100%" mx="auto" py={16} gap={16} >
+
+      <Grid templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }} gap={4} maxW="100%" pb={4} pt={4}>
+        <Image src="./assets/Screenshot-2025-02-04-at-5.22.36 PM.png" w="100%" h="auto" aspectRatio={1} objectFit="cover" borderRadius="lg" />
+        <Image src="./assets/AddToWaveLink.jpg" w="100%" h="auto" aspectRatio={1} objectFit="cover" borderRadius="lg" />
+      </Grid>
+
+      <Box borderRadius="lg" overflow="hidden" >
+        <video width="100%" autoPlay loop>
+          <source src="./assets/WL2.0_Apps.webm" type="video/webm" />
+          Your browser does not support the video tag.
+        </video>
+      </Box>
+
+      <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="1200px" w="100%" mx="auto" py={{ base: 12, md: 16 }} gap={{ base: 12, md: 16 }} >
         <Box flex="2" fontSize="xl" maxW="700px" textAlign="left">
 
-          <Text mb={6}>
-            Wave Link is a professional audio mixing software for content creators,
-            streamers, and podcasters, offering precise control over multiple
-            audio sources. With an intuitive interface, it streamlines setup,
-            mixing, and real-time adjustments to deliver high-quality sound
-            with ease.
-          </Text>
           <Text>
-            As the lead designer, I played a key role in shaping Wave Link's
-            user experience, continuously refining its interface and workflows.
-            Most notably, I worked on the launch of Wave Link 2.0, a major
-            update that introduced Voice Focus for studio-grade sound,
-            one-click audio routing, easy mic sound checks, and enhanced
-            Stream Deck integration. I led efforts to ensure a seamless
-            experience across both Windows and macOS, conducting user
-            research to balance simplicity for beginners with advanced
-            functionality for experienced users. By refining workflows,
-            improving clarity, and iterating based on feedback, I
-            helped make Wave Link 2.0 a more powerful and accessible
-            audio mixing tool.
+            Professional audio mixing software for creators, streamers, and podcasters.
+            I led the UX design for Wave Link 2.0, introducing features like Voice Focus,
+            one-click audio routing, streamlined mic checks, and deeper Stream Deck
+            integration. Balanced simplicity for newcomers with advanced controls for power
+            users through research, workflow refinements, and cross-platform design.
           </Text>
 
         </Box>
@@ -145,7 +146,7 @@ const Home = () => {
             My role
           </Heading>
           <Text mb={8}>
-            Design Lead
+            Designer
           </Text>
 
           <Heading as="h3" mb={2}>
@@ -160,20 +161,6 @@ const Home = () => {
 
       </Flex>
 
-      <Grid templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }} gap={4} maxW="100%" pb={4}>
-        <Image src="./assets/Screenshot-2025-02-04-at-5.22.36 PM.png" w="100%" h="auto" aspectRatio={1} objectFit="cover" borderRadius="lg" />
-        <Image src="./assets/1685175774044.jpg" w="100%" h="auto" aspectRatio={1} objectFit="cover" borderRadius="lg" />
-        <Image src="./assets/Wave_Neo_AtHomeHereThereAnywhere.png" w="100%" h="auto" aspectRatio={1} objectFit="cover" borderRadius="lg" />
-        <Image src="./assets/Wave_XLR_Lifestyle_Shot_08.jpg" w="100%" h="auto" aspectRatio={1} objectFit="cover" borderRadius="lg" />
-      </Grid>
-
-      <Box borderRadius="lg" overflow="hidden" >
-        <video width="100%" controls autoPlay loop>
-          <source src="./assets/WaveLink20_VoiceFocus.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-      </Box>
-
       <Box mt={{ base: 16, md: 32 }} pt={8}>
         <Text fontSize="2xl" fontWeight={600}>
           Elgato Capture - Play and capture on iPad
@@ -185,13 +172,23 @@ const Home = () => {
           <Image src="./assets/Game_Capture_Neo_Lifestyle_Shot_02.jpg" w="100%" maxHeight="550px" borderRadius="lg" />
         </Box>
       </Box>
-      <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="1200px" w="100%" mx="auto" py={16} gap={16} >
+
+      <Grid templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }} gap={4} maxW="100%" pb={4} pt={4}>
+        <Image src="./assets/Game_Capture_Neo_Lifestyle_Shot_01.png" w="100%" h="auto" aspectRatio={1} objectFit="cover" borderRadius="lg" />
+        <Image src="./assets/Game_Capture_4K_X_Lifestyle_Shot_06_A.png" w="100%" h="auto" aspectRatio={1} objectFit="cover" borderRadius="lg" />
+      </Grid>
+
+      <Box borderRadius="lg" overflow="hidden" >
+          <Image src="./assets/Game_Capture_Neo_Lifestyle_Shot_06.jpg" w="100%" maxHeight="550px" borderRadius="lg" />
+      </Box>
+
+      <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="1200px" w="100%" mx="auto" py={{ base: 12, md: 16 }} gap={{ base: 12, md: 16 }} >
         <Box flex="2" fontSize="xl" maxW="700px" textAlign="left">
-          <Text mb={6}>
-            Elgato Capture brings high-quality game and video recording to the iPad, offering a portable, laptop-free solution for streamers, content creators, and gamers who want to relive their best moments. With support for PlayStation, Xbox, Nintendo Switch, Steam Deck, and more, the app seamlessly integrates with Elgato's capture cards and cameras, enabling professional-grade recording on the go.
-          </Text>
           <Text>
-            As the lead designer, I played a key role in shaping the mobile experience, ensuring the app was intuitive, touch-friendly, and optimized for iPad workflows. I focused on designing an interface that simplifies device setup, streamlines recording controls, and provides real-time monitoring—all while maintaining the flexibility and precision needed for high-quality content creation. Through user research, prototyping, and iteration, I refined interactions to make professional game capture more accessible, even for users new to the process.
+            High-quality game and video recording on iPad, compatible with major consoles
+            and cameras. I designed a touch-friendly, intuitive interface for quick setup,
+            precise recording, and real-time monitoring—making professional game capture
+            portable and accessible.
           </Text>
 
         </Box>
@@ -202,7 +199,7 @@ const Home = () => {
             My role
           </Heading>
           <Text mb={8}>
-            Design Lead
+            Designer
           </Text>
 
           <Heading as="h3" mb={2}>
@@ -217,12 +214,59 @@ const Home = () => {
 
       </Flex>
 
-      <Grid templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }} gap={4} maxW="100%" pb={4}>
-        <Image src="./assets/Game_Capture_Neo_Lifestyle_Shot_01.png" w="100%" h="auto" aspectRatio={1} objectFit="cover" borderRadius="lg" />
-        <Image src="./assets/Game_Capture_4K_X_Lifestyle_Shot_06_A.png" w="100%" h="auto" aspectRatio={1} objectFit="cover" borderRadius="lg" />
-        <Image src="./assets/Game_Capture_Neo_FullHDContent.jpg" w="100%" h="auto" aspectRatio={1} objectFit="cover" borderRadius="lg" />
-        <Image src="./assets/Game_Capture_Neo_Lifestyle_Shot_06.jpg" w="100%" h="auto" aspectRatio={1} objectFit="cover" borderRadius="lg" />
-      </Grid>
+      <Box mt={{ base: 16, md: 32 }} pt={8}>
+        <Text fontSize="2xl" fontWeight={600}>
+          Design smarter palettes
+        </Text>
+        <Text fontSize="2xl" fontWeight={400} mb={8} color={"gray.500"}>
+          Web
+        </Text>
+
+        <VStack align={"start"} gap={8}>
+
+          <Box borderRadius="lg" overflow="hidden" w={"100%"} borderWidth="1px" borderColor="gray.200">
+            <video width="100%" autoPlay loop muted>
+              <source src="./assets/ToolPreview.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </Box>
+
+          <Button
+            onClick={() => navigate("/design/color-palette")}
+            variant="outline"
+            size="lg"
+            rounded="full"
+          >
+            Try AI Palette Generator
+            <ArrowRight />
+          </Button>
+        </VStack>
+      </Box>
+
+      <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="1200px" w="100%" mx="auto" py={{ base: 12, md: 16 }} gap={{ base: 12, md: 16 }} >
+        <Box flex="2" fontSize="xl" maxW="700px" textAlign="left">
+
+          <Text>
+            An in-browser AI-powered color palette generator built with React and 
+            Chakra UI, integrating the TinyLlama-1.1B model via WebLLM for efficient 
+            local inference with WebGPU. It features dynamic generation from user 
+            prompts, intelligent palette naming, and color fine-tuning.
+          </Text>
+
+        </Box>
+
+        <Box flex="1" fontSize="xl" textAlign="left">
+
+          <Heading as="h3" mb={2}>
+            Project type
+          </Heading>
+          <Text mb={8}>
+            Personal project
+          </Text>
+
+        </Box>
+
+      </Flex>
 
       <Box mt={{ base: 16, md: 32 }} pt={8}>
         <Text fontSize="2xl" fontWeight={600}>
@@ -235,10 +279,11 @@ const Home = () => {
           <Image src="./assets/Input_value_helper.png" w="100%" h="auto" borderRadius="lg" />
         </Box>
       </Box>
-      <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="1200px" w="100%" mx="auto" py={16} gap={16}>
+      <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="1200px" w="100%" mx="auto" py={{ base: 12, md: 16 }} gap={{ base: 12, md: 16 }}>
         <Box flex="2" fontSize="xl" maxW="700px" textAlign="left">
           <Text mb={{ base: 0, md: 6 }}>
-            I worked at GritWorld on GritGene, helping develop their design system and conducting user research to enhance the UX of GritGene, their desktop software. This experience provided valuable insights into designing for advanced graphics and real-time rendering tools. Due to confidentiality, I can't share details but feel free to reach out if you'd like to learn more.
+            At GritWorld, I contributed to the GritGene design system and UX research
+            for their advanced graphics and real-time rendering tools.
           </Text>
 
         </Box>
@@ -339,7 +384,7 @@ const Home = () => {
         </Flex>
 
         <Box >
-          <Grid templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }} gap={4} maxW="100%" pt={4}>
+          <Grid templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }} gap={4} maxW="100%">
             <Image src="./assets/EV_MTS-6154-43_Cardioid_Hero_GrilleOff_nbg.png" w="100%" h="auto" aspectRatio={1} objectFit="cover" borderRadius="lg" bg={"gray.100"} />
             <Image src="./assets/EV_MTS-6154-43_Cardioid_Hero_GrilleOn_nbg.png" w="100%" h="auto" aspectRatio={1} objectFit="cover" borderRadius="lg" bg={"gray.100"} />
           </Grid>
