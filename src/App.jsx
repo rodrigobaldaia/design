@@ -16,14 +16,14 @@ function App() {
       <Header /> {/* Always visible on all pages */}
 
       <Box flex="1">
-        <Box maxW="1240px" mx="auto" px={0} py={0}>
+        <Box maxW="1240px" mx="auto">
           <Toaster />
           <Routes>
             <Route path="/design/" element={<Home />} />
 
             {/* Suspense is only needed for dynamically imported routes */}
             <Route
-              path="/design/about"
+              path="/about"
               element={
                 <Suspense fallback={<Flex justify="center" py={10}><Spinner size="xl" /></Flex>}>
                   <About />
@@ -31,7 +31,7 @@ function App() {
               }
             />
             <Route
-              path="design/color-palette"
+              path="/color-palette"
               element={
                 <Suspense fallback={<Flex justify="center" py={10}><Spinner size="xl" /></Flex>}>
                   <ColorPalette />
