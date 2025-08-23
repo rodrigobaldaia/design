@@ -23,7 +23,7 @@ function App() {
 
             {/* Suspense is only needed for dynamically imported routes */}
             <Route
-              path="/about"
+              path="/design/about"
               element={
                 <Suspense fallback={<Flex justify="center" py={10}><Spinner size="xl" /></Flex>}>
                   <About />
@@ -31,7 +31,7 @@ function App() {
               }
             />
             <Route
-              path="/color-palette"
+              path="/design/color-palette"
               element={
                 <Suspense fallback={<Flex justify="center" py={10}><Spinner size="xl" /></Flex>}>
                   <ColorPalette />
