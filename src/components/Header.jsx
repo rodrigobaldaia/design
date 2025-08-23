@@ -48,8 +48,8 @@ const Header = ({ children }) => {
           py={isScrolled ? 4 : 8}
           mt={isScrolled ? 4 : 0}
           px={{
-            base: isScrolled ? 4 : 8, 
-            xl: isScrolled ? 4 : 0 
+            base: isScrolled ? 4 : 8,
+            xl: isScrolled ? 4 : 0
           }}
           bg={isScrolled ? "rgba(255, 255, 255, 0.8)" : "white"}
           backdropFilter={isScrolled ? "blur(10px)" : "none"}
@@ -63,8 +63,12 @@ const Header = ({ children }) => {
           <Heading size="xl">Rodrigo Baldaia</Heading>
           <Tabs.Root value={getTabValue()} variant="plain" maxW="md" fitted size="md">
             <Tabs.List bg="bg.muted" rounded="4xl" p="1">
-              <Tabs.Trigger as={Link} to="/design/" value="work">Work</Tabs.Trigger>
-              <Tabs.Trigger as={Link} to="/design/about" value="about">About</Tabs.Trigger>
+              <Link to="/design/">
+                <Tabs.Trigger value="work">Work</Tabs.Trigger>
+              </Link>
+              <Link to="/design/about">
+                <Tabs.Trigger value="about">About</Tabs.Trigger>
+              </Link>
               <Tabs.Indicator rounded="4xl" />
             </Tabs.List>
           </Tabs.Root>
@@ -80,10 +84,14 @@ const Header = ({ children }) => {
           width="100%"
         >
           {/* Tabs always on top */}
-          <Tabs.Root value={getTabValue()} variant="plain" size="lg">
-            <Tabs.List bg="bg.muted" rounded="4xl" p="1" justifyContent="center">
-              <Tabs.Trigger as={Link} to="/design/" value="work">Work</Tabs.Trigger>
-              <Tabs.Trigger as={Link} to="/design/about" value="about">About</Tabs.Trigger>
+          <Tabs.Root value={getTabValue()} variant="plain" maxW="md" fitted size="md">
+            <Tabs.List bg="bg.muted" rounded="4xl" p="1">
+              <Link to="/design/">
+                <Tabs.Trigger value="work">Work</Tabs.Trigger>
+              </Link>
+              <Link to="/design/about">
+                <Tabs.Trigger value="about">About</Tabs.Trigger>
+              </Link>
               <Tabs.Indicator rounded="4xl" />
             </Tabs.List>
           </Tabs.Root>
