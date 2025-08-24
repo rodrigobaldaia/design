@@ -43,21 +43,37 @@ const Footer = () => {
         align="left"
         direction={{ base: "column", md: "row" }}
       >
-        {/* Desktop: Show email + hover effect */}
-        <HStack
-          spacing={4}
-          display={{ base: "none", md: "flex" }}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
-          <Link
-            onClick={() => copyToClipboard(email)}
-          >{copied ? "Email copied!" : email}</Link>
-          {isHovered && (
-            <LuCopy />
+        {/* Desktop: Social & Show email + hover effect */}
+        <HStack >
 
-          )}
+          {/* LinkedIn Button Desktop */}
+          <IconButton
+            as="a" href="https://www.linkedin.com/in/rodrigobaldaia/" target="_blank"
+            display={{ base: "none", md: "flex" }}
+            aria-label="LinkedIn"
+            variant="ghost"
+          >
+            <FaLinkedin />
+          </IconButton>
+
+          <HStack
+            spacing={4}
+            display={{ base: "none", md: "flex" }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            <Link
+              onClick={() => copyToClipboard(email)}
+            >{copied ? "Email copied!" : email}</Link>
+            {isHovered && (
+              <LuCopy />
+
+            )}
+          </HStack>
+
         </HStack>
+        
+
 
         {/* Mobile: Show a full button with email + clipboard icon + Linkedin */}
         <Flex direction="column" display={{ base: "flex", md: "none" }} gap={2} mt={8} fontSize="md">
@@ -79,29 +95,6 @@ const Footer = () => {
 
         </Flex>
 
-        {/* Social & Scroll to Top Buttons */}
-        <Flex gap={3}>
-          {/* LinkedIn Button Desktop */}
-          <IconButton
-            as="a" href="https://www.linkedin.com/in/rodrigobaldaia/" target="_blank"
-            display={{ base: "none", md: "flex" }}
-            aria-label="LinkedIn"
-            variant="ghost"
-          >
-            <FaLinkedin />
-          </IconButton>
-
-          {/* Scroll to Top Button Desktop */}
-          <IconButton
-            display={{ base: "none", md: "flex" }}
-            aria-label="Scroll to Top"
-            variant="ghost"
-            color="black"
-            onClick={scrollToTop}
-          >
-            <ArrowUp />
-          </IconButton>
-        </Flex>
       </Flex>
     </Box>
   );

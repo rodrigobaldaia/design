@@ -15,7 +15,7 @@ const Home = () => {
   // Show button only when scrolling down
   useEffect(() => {
     const handleScroll = () => {
-      setIsVisible(window.scrollY > 4500); // Adjust value of scrool
+      setIsVisible(window.scrollY > 1000); // Adjust value of scrool
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -179,7 +179,7 @@ const Home = () => {
       </Grid>
 
       <Box borderRadius="lg" overflow="hidden" >
-          <Image src="./assets/Game_Capture_Neo_Lifestyle_Shot_06.jpg" w="100%" maxHeight="550px" borderRadius="lg" />
+        <Image src="./assets/Game_Capture_Neo_Lifestyle_Shot_06.jpg" w="100%" maxHeight="550px" borderRadius="lg" />
       </Box>
 
       <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="1200px" w="100%" mx="auto" py={{ base: 12, md: 16 }} gap={{ base: 12, md: 16 }} >
@@ -247,9 +247,9 @@ const Home = () => {
         <Box flex="2" fontSize="xl" maxW="700px" textAlign="left">
 
           <Text>
-            An in-browser AI-powered color palette generator built with React and 
-            Chakra UI, integrating the TinyLlama-1.1B model via WebLLM for efficient 
-            local inference with WebGPU. It features dynamic generation from user 
+            An in-browser AI-powered color palette generator built with React and
+            Chakra UI, integrating the TinyLlama-1.1B model via WebLLM for efficient
+            local inference with WebGPU. It features dynamic generation from user
             prompts, intelligent palette naming, and color fine-tuning.
           </Text>
 
@@ -402,7 +402,7 @@ const Home = () => {
         </Box>
       </Box>
 
-      <Box mt={{ base: 16, md: 24 }} pt={8} >
+      <Box mt={{ base: 16, md: 24 }} pt={8} mb={{ base: 0, md: 8 }} >
 
         <Flex mb={8}>
           <Text fontSize="2xl" fontWeight={600}>
@@ -432,19 +432,40 @@ const Home = () => {
         </Box>
       </Box>
 
-      {/* Scroll to Top Button */}
+      {/* Desktop: Scroll to Top Button */}
+      <IconButton
+        display={{ base: "none", md: "flex" }}
+        aria-label="Scroll to Top"
+        variant="subtle"
+        rounded="full"
+        size="md"
+        onClick={scrollToTop}
+        position="fixed"
+        bottom="8"
+        right="calc((100vw - 1240px) / 2 + 16px)" // aligns to content edge
+        zIndex="1000"
+        opacity={isVisible ? 1 : 0}
+        transition="opacity 0.3s ease-in-out"
+        bg="rgba(255, 255, 255, 0.7)"
+        backdropFilter="blur(10px)"
+        _hover={{ bg: "rgba(255, 255, 255, 1)" }}
+      >
+        <ArrowUp />
+      </IconButton>
+
+      {/* Mobile: Scroll to Top Button */}
       <IconButton
         display={{ base: "flex", md: "none" }}
         aria-label="Scroll to Top"
         variant="subtle"
         rounded="full"
-        size="lg"
+        size="md"
         onClick={scrollToTop}
         position="fixed"
-        bottom="10" // Spacing from bottom
-        right="10"
-        zIndex="1000" // Ensures it stays on top
-        opacity={isVisible ? 1 : 0} // Show only when needed
+        bottom="12"
+        right="12"
+        zIndex="1000"
+        opacity={isVisible ? 1 : 0}
         transition="opacity 0.3s ease-in-out"
         bg="rgba(255, 255, 255, 0.7)"
         backdropFilter="blur(10px)"
