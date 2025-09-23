@@ -127,7 +127,7 @@ const Home = () => {
         </video>
       </Box>
 
-      <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="1200px" w="100%" mx="auto" py={{ base: 12, md: 16 }} gap={{ base: 12, md: 16 }} >
+      <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="1240px" w="100%" mx="auto" py={{ base: 12, md: 16 }} gap={{ base: 12, md: 16 }} >
         <Box flex="2" fontSize="xl" maxW="700px" textAlign="left">
 
           <Text>
@@ -182,7 +182,7 @@ const Home = () => {
         <Image src="./assets/Game_Capture_Neo_Lifestyle_Shot_06.jpg" w="100%" maxHeight="550px" borderRadius="lg" />
       </Box>
 
-      <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="1200px" w="100%" mx="auto" py={{ base: 12, md: 16 }} gap={{ base: 12, md: 16 }} >
+      <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="1240px" w="100%" mx="auto" py={{ base: 12, md: 16 }} gap={{ base: 12, md: 16 }} >
         <Box flex="2" fontSize="xl" maxW="700px" textAlign="left">
           <Text>
             High-quality game and video recording on iPad, compatible with major consoles
@@ -243,7 +243,7 @@ const Home = () => {
         </VStack>
       </Box>
 
-      <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="1200px" w="100%" mx="auto" py={{ base: 12, md: 16 }} gap={{ base: 12, md: 16 }} >
+      <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="1240px" w="100%" mx="auto" py={{ base: 12, md: 16 }} gap={{ base: 12, md: 16 }} >
         <Box flex="2" fontSize="xl" maxW="700px" textAlign="left">
 
           <Text>
@@ -279,7 +279,7 @@ const Home = () => {
           <Image src="./assets/Input_value_helper.png" w="100%" h="auto" borderRadius="lg" />
         </Box>
       </Box>
-      <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="1200px" w="100%" mx="auto" py={{ base: 12, md: 16 }} gap={{ base: 12, md: 16 }}>
+      <Flex direction={{ base: "column", md: "row" }} justify="center" maxW="1240px" w="100%" mx="auto" py={{ base: 12, md: 16 }} gap={{ base: 12, md: 16 }}>
         <Box flex="2" fontSize="xl" maxW="700px" textAlign="left">
           <Text mb={{ base: 0, md: 6 }}>
             At GritWorld, I contributed to the GritGene design system and UX research

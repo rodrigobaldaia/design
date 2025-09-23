@@ -36,21 +36,21 @@ function About() {
 
           <Box flex="1">
             <Text mb={4}>
-              Figma<br />
+              Figma / Figma Make<br />
               Adobe Creative Suite<br />
               3D Visualization<br />
+              Lottie Animations<br />
               Cursor / v0<br />
-              VS Code / Git<br />
             </Text>
 
           </Box>
 
           <Box flex="1">
             <Text mb={0}>
-              Python<br />
-              SQL<br />
+              VS Code / Git<br />
+              Python / SQL<br />
               HTML / CSS / JS<br />
-              React / Vite<br />
+              React / Vite / Next.js<br />
               Jira / Confluence<br />
             </Text>
 
