@@ -10,7 +10,7 @@ import { Toaster, toaster } from "../components/ui/toaster"
 
 const Footer = () => {
   const [copied, setCopied] = useState(false);
-  const email = "rodbaldaia@gmail.com";
+  const email = "rodrigopratabaldaia@gmail.com";
   const [isHovered, setIsHovered] = useState(false);
 
 
@@ -48,7 +48,7 @@ const Footer = () => {
 
           {/* LinkedIn Button Desktop */}
           <IconButton
-            as="a" href="https://www.linkedin.com/in/rodrigobaldaia/" target="_blank"
+            as="a" href="https://www.linkedin.com/in/rodrigopratabaldaia/" target="_blank"
             display={{ base: "none", md: "flex" }}
             aria-label="LinkedIn"
             variant="ghost"

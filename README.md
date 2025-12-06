@@ -1,11 +1,11 @@
-# Rodrigo Baldaia – UX Designer Portfolio
+# Rodrigo Prata Baldaia – UX Designer Portfolio
 
 This is the source code for my professional portfolio website, a curated showcase of my design work, selected projects, and creative experiments, built with **React** and **Vite**.  
 
 It blends **case studies** from my professional experience with **personal projects** that explore AI, design and code.
 
 **Live site:** https://rodrigobaldaia.github.io/design/
-**LinkedIn:** https://www.linkedin.com/in/rodrigobaldaia/
+**LinkedIn:** https://www.linkedin.com/in/rodrigopratabaldaia/
 
 ---
 
@@ -37,6 +37,6 @@ It blends **case studies** from my professional experience with **personal proje
 
 ## Contact
 
-Email: rodbaldaia@gmail.com
+Email: rodrigopratabaldaia@gmail.com
 
-LinkedIn: https://www.linkedin.com/in/rodrigobaldaia/
+LinkedIn: https://www.linkedin.com/in/rodrigopratabaldaia/

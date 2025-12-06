@@ -60,7 +60,7 @@ const Home = () => {
             width={"100%"}
             textAlign={"center"}
           >
-            Rodrigo Baldaia.</Heading>
+            Rodrigo Prata Baldaia.</Heading>
         </VStack>
 
         {/* Centered text container */}

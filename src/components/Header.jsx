@@ -60,7 +60,7 @@ const Header = ({ children }) => {
           width="100%"
           transition="all 0.3s ease"
         >
-          <Heading size="xl">Rodrigo Baldaia</Heading>
+          <Heading size="xl">Rodrigo Prata Baldaia</Heading>
           <Tabs.Root value={getTabValue()} variant="plain" maxW="md" fitted size="md">
             <Tabs.List bg="bg.muted" rounded="4xl" p="1">
               <Link to="/design/">
