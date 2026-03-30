@@ -10,18 +10,6 @@ function About() {
       bg: "black",
     },
     {
-      icon: "./assets/Adobe_Illustrator_CC_icon.svg",
-      title: "Adobe Illustrator",
-      subtitle: "Vector-based Design & Iconography",
-      bg: "#330000",
-    },
-    {
-      icon: "./assets/Adobe_Photoshop_CC_icon.svg",
-      title: "Adobe Photoshop",
-      subtitle: "Image Editing",
-      bg: "#001E36",
-    },
-    {
       icon: "./assets/Cursor_logo.png",
       title: "Cursor",
       subtitle: "AI-Assisted Design & Code Prototyping",
@@ -58,6 +46,24 @@ function About() {
       bg: "#FFDD33",
     },
     {
+      icon: "./assets/claude-ai-icon.svg",
+      title: "Claude Code",
+      subtitle: "AI-Powered Coding & Automation",
+      bg: "#D77655",
+    },
+    {
+      icon: "./assets/vscode-logo.svg",
+      title: "VS Code",
+      subtitle: "Frontend Prototyping & Code Editing",
+      bg: "white",
+    },
+    {
+      icon: "./assets/github-logo.svg",
+      title: "GitHub",
+      subtitle: "Code Collaboration & Version Control",
+      bg: "black",
+    },
+    {
       icon: "./assets/lottiefiles-logo.svg",
       title: "LottieFiles",
       subtitle: "UI Motion Graphics & Micro-interactions",
@@ -70,22 +76,16 @@ function About() {
       bg: "white",
     },
     {
-      icon: "./assets/claude-ai-icon.svg",
-      title: "Claude Code",
-      subtitle: "AI-Powered Coding & Automation",
-      bg: "#D77655",
+      icon: "./assets/Adobe_Illustrator_CC_icon.svg",
+      title: "Adobe Illustrator",
+      subtitle: "Vector-based Design & Iconography",
+      bg: "#330000",
     },
     {
-      icon: "./assets/github-logo.svg",
-      title: "GitHub",
-      subtitle: "Code Collaboration & Version Control",
-      bg: "black",
-    },
-    {
-      icon: "./assets/vscode-logo.svg",
-      title: "VS Code",
-      subtitle: "Frontend Prototyping & Code Editing",
-      bg: "white",
+      icon: "./assets/Adobe_Photoshop_CC_icon.svg",
+      title: "Adobe Photoshop",
+      subtitle: "Image Editing",
+      bg: "#001E36",
     },
   ];
 
