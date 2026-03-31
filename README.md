@@ -17,10 +17,6 @@ It blends **case studies** from my professional experience with **personal proje
 - **GritGene** - Developed a design system and UX improvements for advanced real-time rendering tools (confidential project).
 - **Bosch Communications** - Created 3D visuals for Electro-Voice, RTS, and TELEX product launches.
 
-### Personal Projects
-- **AI-Powered Color Palette Generator** - A client-only web app using React, Chakra UI, and WebLLM (TinyLlama-1.1B) to create designer-ready palettes from natural language prompts.  
-  Runs fully in-browser via WebGPU.
-
 ---
 
 ## Tech Stack
@@ -29,7 +25,6 @@ It blends **case studies** from my professional experience with **personal proje
 |----------------|-------------------|
 | UI Framework   | React, Chakra UI  |
 | Bundler        | Vite              |
-| AI Integration | WebLLM, WebGPU |
 | Icons          | lucide-react, react-icons |
 | Deployment     | GitHub Pages  |
 
