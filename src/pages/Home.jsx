@@ -254,19 +254,19 @@ const LightboxProvider = ({ children }) => {
 
   const prev = useCallback(() =>
     setState((s) => ({ ...s, index: (s.index - 1 + s.items.length) % s.items.length })),
-  []);
+    []);
 
   const next = useCallback(() =>
     setState((s) => ({ ...s, index: (s.index + 1) % s.items.length })),
-  []);
+    []);
 
   // Keyboard nav
   useEffect(() => {
     if (!state.open) return;
     const handle = (e) => {
-      if (e.key === "Escape")      closeLightbox();
-      if (e.key === "ArrowLeft")   prev();
-      if (e.key === "ArrowRight")  next();
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowLeft") prev();
+      if (e.key === "ArrowRight") next();
     };
     window.addEventListener("keydown", handle);
     return () => window.removeEventListener("keydown", handle);
@@ -513,10 +513,10 @@ const ProjectSection = ({ year, title, subtitle, media, links = [], isFirst, pro
 // Bosch / creative media — defined once so lightbox can reference the list
 // ---------------------------------------------------------------------------
 const BOSCH_MEDIA = [
-  { src: "./assets/EV_EVOLVE50M_Array_Exploded_Black_nbg.png",      type: "image", href: "https://products.electrovoice.com/emea/en/evolve-50m/", label: "See product page", maxH: "600px" },
-  { src: "./assets/EV_MTS-6154-43_Cardioid_Hero_GrilleOff_nbg.png", type: "image", href: "https://products.electrovoice.com/emea/en/mts/",         label: "See product page", aspectRatio: 1 },
-  { src: "./assets/DBP_Bottom.png",                                  type: "image", href: "https://products.rtsintercoms.com/na/en/dbp/",           label: "See product page", aspectRatio: 1 },
-  { src: "./assets/Everse8_02.png",                                  type: "image", href: "https://products.electrovoice.com/emea/en/everse-8/",    label: "See product page", maxH: "600px" },
+  { src: "./assets/EV_EVOLVE50M_Array_Exploded_Black_nbg.png", type: "image", href: "https://products.electrovoice.com/emea/en/evolve-50m/", label: "See product page", maxH: "600px" },
+  { src: "./assets/EV_MTS-6154-43_Cardioid_Hero_GrilleOff_nbg.png", type: "image", href: "https://products.electrovoice.com/emea/en/mts/", label: "See product page", aspectRatio: 1 },
+  { src: "./assets/DBP_Bottom.png", type: "image", href: "https://products.rtsintercoms.com/na/en/dbp/", label: "See product page", aspectRatio: 1 },
+  { src: "./assets/Everse8_02.png", type: "image", href: "https://products.electrovoice.com/emea/en/everse-8/", label: "See product page", maxH: "600px" },
 ];
 
 const CreativeMediaItem = ({ flatIdx }) => {
@@ -618,7 +618,7 @@ const OtherCreativeSection = () => (
       letterSpacing="0.12em"
       textTransform="uppercase"
       color="gray.400"
-      mb={4}
+      mb={2}
     >
       Other creative projects
     </Text>
@@ -697,7 +697,7 @@ const PROJECTS = [
   {
     year: "2026",
     title: "Wave Link plugin for Stream Deck",
-    subtitle: "Design of a tactile plugin for audio mixing",
+    subtitle: "Design of a tactile plugin for Wave Link",
     media: [
       { src: "./assets/2026-03-03T11_06_18.004592.mp4", type: "video" },
       { src: "./assets/WaveLink3(Beta)-preview-dials.png", type: "image" },
@@ -712,7 +712,7 @@ const PROJECTS = [
   {
     year: "2025",
     title: "Elgato Studio",
-    subtitle: "Unified control for recording and capture workflows",
+    subtitle: "Brand-new capture app and companion Stream Deck plugin",
     media: [
       { src: "./assets/elgato_studio_app_game_screen_recording.png", type: "image" },
       { src: "./assets/ElgatoStudio-preview-plugin.png", type: "image" },
@@ -755,6 +755,20 @@ const PROJECTS = [
     subtitle: "Improving usability for complex real-time 3D workflows",
     media: [
       { src: "./assets/Input_value_helper.png", type: "image" },
+    ],
+    links: [],
+  },
+
+  {
+    year: "Personal Project",
+    title: "Net Worth Tracker",
+    subtitle: "A personal finance dashboard",
+    media: [
+      { src: "./assets/iPhone_01.png", type: "image" },
+      { src: "./assets/iPhone_02.png", type: "image" },
+      { src: "./assets/MacBook Pro.png", type: "image", grid: true },
+      { src: "./assets/iPhone_03.png", type: "image", grid: true },
+      { src: "./assets/iPhone_04.png", type: "image" },
     ],
     links: [],
   },
