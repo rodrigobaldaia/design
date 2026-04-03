@@ -752,7 +752,7 @@ const PROJECTS = [
   {
     year: "2022–2023",
     title: "UX Research and UI for GritGene",
-    subtitle: "Improving usability for complex real-time 3D workflows",
+    subtitle: "Improving usability for complex 3D workflows",
     media: [
       { src: "./assets/Input_value_helper.png", type: "image" },
     ],
@@ -828,7 +828,7 @@ const Home = () => {
               fontSize="clamp(2rem, 5vw, 4.5rem)"
               fontWeight={600}
               textTransform="uppercase"
-              textAlign={{ base: "center", xl: "left" }}
+              textAlign={{ base: "center", xl: "center" }}
               lineHeight={1.1}
               letterSpacing="-0.02em"
             >
@@ -849,7 +849,7 @@ const Home = () => {
             </Text>
           </Flex>
 
-          <Box pb={{ base: 0, xl: 8 }} textAlign={{ base: "center", xl: "left" }}>
+          <Box pb={{ base: 0, xl: 8 }} textAlign={{ base: "center", xl: "center" }}>
             <Button
               onClick={scrollToProjects}
               variant="outline"
