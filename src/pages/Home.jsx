@@ -9,6 +9,7 @@
  *   ├── HeroSection          (unchanged: intro + scroll CTA)
  *   ├── ProjectSection       (reusable per project)
  *   │   ├── ProjectHeader    (year · title · description)
+ *   │   ├── ProjectInfoSection  ← NEW (description · contributions · focus areas · metric)
  *   │   └── ProjectGallery   (media items with fade-in + click-to-open)
  *   ├── OtherCreativeSection (Bosch / 3D visuals block)
  *   └── ScrollToTopButton    (fixed FAB)
@@ -26,10 +27,13 @@ import {
   IconButton,
   Link,
   VStack,
+  HStack,
   Container,
+  Badge,
 } from "@chakra-ui/react";
 import { ArrowDown, ArrowUp, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { RxArrowTopRight } from "react-icons/rx";
+import { LuExternalLink } from "react-icons/lu";
 import {
   useRef,
   useEffect,
@@ -41,7 +45,7 @@ import {
 import { createPortal } from "react-dom";
 
 // ---------------------------------------------------------------------------
-// Global CSS — keyframes + lightbox transitions + hover hint
+// Global CSS
 // ---------------------------------------------------------------------------
 const globalStyles = `
   @keyframes fadeUp {
@@ -69,7 +73,7 @@ const LightboxContext = createContext(null);
 const useLightbox = () => useContext(LightboxContext);
 
 // ---------------------------------------------------------------------------
-// LightboxModal — rendered into document.body via portal
+// LightboxModal
 // ---------------------------------------------------------------------------
 const LightboxModal = ({ state, onClose, onPrev, onNext }) => {
   const { items, index } = state;
@@ -100,7 +104,6 @@ const LightboxModal = ({ state, onClose, onPrev, onNext }) => {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* ── Close ── */}
       <IconButton
         aria-label="Close lightbox"
         position="fixed"
@@ -118,7 +121,6 @@ const LightboxModal = ({ state, onClose, onPrev, onNext }) => {
         <X size={16} />
       </IconButton>
 
-      {/* ── Prev ── */}
       {hasMultiple && (
         <IconButton
           aria-label="Previous"
@@ -139,7 +141,6 @@ const LightboxModal = ({ state, onClose, onPrev, onNext }) => {
         </IconButton>
       )}
 
-      {/* ── Media ── */}
       <Box
         className="lb-media"
         key={`${item.src}-${index}`}
@@ -159,34 +160,19 @@ const LightboxModal = ({ state, onClose, onPrev, onNext }) => {
             muted
             playsInline
             controls
-            style={{
-              maxWidth: "100%",
-              maxHeight: "88vh",
-              borderRadius: "12px",
-              display: "block",
-            }}
+            style={{ maxWidth: "100%", maxHeight: "88vh", borderRadius: "12px", display: "block" }}
           >
-            <source
-              src={item.src}
-              type={item.src.endsWith(".webm") ? "video/webm" : "video/mp4"}
-            />
+            <source src={item.src} type={item.src.endsWith(".webm") ? "video/webm" : "video/mp4"} />
           </video>
         ) : (
           <img
             src={item.src}
             alt=""
-            style={{
-              maxWidth: "100%",
-              maxHeight: "88vh",
-              borderRadius: "12px",
-              objectFit: "contain",
-              display: "block",
-            }}
+            style={{ maxWidth: "100%", maxHeight: "88vh", borderRadius: "12px", objectFit: "contain", display: "block" }}
           />
         )}
       </Box>
 
-      {/* ── Next ── */}
       {hasMultiple && (
         <IconButton
           aria-label="Next"
@@ -207,7 +193,6 @@ const LightboxModal = ({ state, onClose, onPrev, onNext }) => {
         </IconButton>
       )}
 
-      {/* ── Dot indicators ── */}
       {hasMultiple && (
         <Flex
           position="fixed"
@@ -237,7 +222,7 @@ const LightboxModal = ({ state, onClose, onPrev, onNext }) => {
 };
 
 // ---------------------------------------------------------------------------
-// LightboxProvider — wraps the page; exposes openLightbox(items, index)
+// LightboxProvider
 // ---------------------------------------------------------------------------
 const LightboxProvider = ({ children }) => {
   const [state, setState] = useState({ open: false, items: [], index: 0 });
@@ -253,14 +238,11 @@ const LightboxProvider = ({ children }) => {
   }, []);
 
   const prev = useCallback(() =>
-    setState((s) => ({ ...s, index: (s.index - 1 + s.items.length) % s.items.length })),
-    []);
+    setState((s) => ({ ...s, index: (s.index - 1 + s.items.length) % s.items.length })), []);
 
   const next = useCallback(() =>
-    setState((s) => ({ ...s, index: (s.index + 1) % s.items.length })),
-    []);
+    setState((s) => ({ ...s, index: (s.index + 1) % s.items.length })), []);
 
-  // Keyboard nav
   useEffect(() => {
     if (!state.open) return;
     const handle = (e) => {
@@ -285,7 +267,7 @@ const LightboxProvider = ({ children }) => {
 };
 
 // ---------------------------------------------------------------------------
-// useFadeIn hook
+// useFadeIn
 // ---------------------------------------------------------------------------
 function useFadeIn(threshold = 0.12) {
   const ref = useRef(null);
@@ -304,7 +286,7 @@ function useFadeIn(threshold = 0.12) {
 }
 
 // ---------------------------------------------------------------------------
-// MediaItem — with fade-in + lightbox on click
+// MediaItem
 // ---------------------------------------------------------------------------
 const MediaItem = ({ src, type = "image", borderRadius = "12px", items, itemIndex }) => {
   const { ref, visible } = useFadeIn();
@@ -332,14 +314,12 @@ const MediaItem = ({ src, type = "image", borderRadius = "12px", items, itemInde
     borderRadius,
   };
 
-  const handleClick = () => openLightbox(items, itemIndex);
-
   return (
     <Box
       ref={ref}
       style={wrapStyle}
       className="media-item"
-      onClick={handleClick}
+      onClick={() => openLightbox(items, itemIndex)}
       role="button"
       aria-label="View fullscreen"
     >
@@ -368,12 +348,7 @@ const MediaItem = ({ src, type = "image", borderRadius = "12px", items, itemInde
           _groupHover={{ transform: "scale(1.015)" }}
         />
       )}
-
-      {/* Hover hint */}
-      <Box
-        className="media-hint"
-        style={{ ...hintBase, background: "rgba(0,0,0,0.22)" }}
-      >
+      <Box className="media-hint" style={{ ...hintBase, background: "rgba(0,0,0,0.22)" }}>
         <Box
           bg="rgba(255,255,255,0.15)"
           backdropFilter="blur(10px)"
@@ -437,7 +412,7 @@ const ProjectGallery = ({ items }) => {
 // ProjectHeader
 // ---------------------------------------------------------------------------
 const ProjectHeader = ({ year, title, subtitle }) => (
-  <Box mb={{ base: 10, md: 12 }}>
+  <Box mb={{ base: 8, md: 10 }}>
     <Text
       fontSize={{ base: "sm", md: "md" }}
       fontWeight={500}
@@ -460,7 +435,13 @@ const ProjectHeader = ({ year, title, subtitle }) => (
       {title}
     </Heading>
     {subtitle && (
-      <Text fontSize={{ base: "lg", md: "xl" }} color="gray.500" fontWeight={400} maxW="640px" lineHeight={1.2}>
+      <Text
+        fontSize={{ base: "lg", md: "xl" }}
+        color="gray.500"
+        fontWeight={400}
+        maxW="640px"
+        lineHeight={1.2}
+      >
         {subtitle}
       </Text>
     )}
@@ -468,49 +449,297 @@ const ProjectHeader = ({ year, title, subtitle }) => (
 );
 
 // ---------------------------------------------------------------------------
+// ProjectInfoSection — NEW
+// Sits between ProjectHeader and ProjectGallery.
+// Receives: description, contributions, focusAreas, metric, previewSrc
+// All fields are optional — the component gracefully hides empty sections.
+// ---------------------------------------------------------------------------
+const ProjectInfoSection = ({ description, contributions, focusAreas, links, metric, previewSrc, media, previewIndex }) => {
+  // Nothing to render if all fields are absent
+  const hasContent = description || contributions?.length || focusAreas?.length || metric;
+  if (!hasContent) return null;
+
+  const { openLightbox } = useLightbox();
+
+  return (
+    <Grid
+      templateColumns={{ base: "1fr", lg: "1fr 1fr" }}
+      gap={{ base: 10, lg: 16 }}
+      mb={{ base: 4, md: 16 }}
+      alignItems="start"
+    >
+      {/* ── Left: text info ── */}
+      <VStack align="start" gap={8}>
+
+        {/* Description */}
+        {description && (
+          <Box>
+            <Text
+              fontSize={{ base: "md", md: "lg" }}
+              color="gray.700"
+              lineHeight={1.75}
+              fontWeight={400}
+            >
+              {description}
+            </Text>
+          </Box>
+        )}
+
+        {/* Contributions */}
+        {contributions?.length > 0 && (
+          <Box w="100%">
+            <Text
+              fontSize="xs"
+              fontWeight={600}
+              letterSpacing="0.1em"
+              textTransform="uppercase"
+              color="gray.400"
+              mb={3}
+            >
+              My Contributions
+            </Text>
+            <VStack align="start" gap={2}>
+              {contributions.map((item, i) => (
+                <Flex key={i} align="start" gap={3}>
+                  {/* Subtle bullet */}
+                  <Box
+                    mt="9px"
+                    flexShrink={0}
+                    w="4px"
+                    h="4px"
+                    borderRadius="full"
+                    bg="gray.300"
+                  />
+                  <Text fontSize="md" color="gray.700" lineHeight={1.6}>
+                    {item}
+                  </Text>
+                </Flex>
+              ))}
+            </VStack>
+          </Box>
+        )}
+
+        {/* Focus Areas */}
+        {focusAreas?.length > 0 && (
+          <Box w="100%">
+            <Text
+              fontSize="xs"
+              fontWeight={600}
+              letterSpacing="0.1em"
+              textTransform="uppercase"
+              color="gray.400"
+              mb={3}
+            >
+              Focus Areas
+            </Text>
+            <Flex gap={2} flexWrap="wrap">
+              {focusAreas.map((area) => (
+                <Badge
+                  key={area}
+                  variant="outline"
+                  borderRadius="full"
+                  px={3}
+                  py={1}
+                  fontSize="xs"
+                  fontWeight={500}
+                  letterSpacing="0.04em"
+                  color="gray.600"
+                  borderColor="gray.200"
+                >
+                  {area}
+                </Badge>
+              ))}
+            </Flex>
+          </Box>
+        )}
+
+        {/* Links */}
+        {links?.length > 0 && <ProjectLinks links={links} />}
+        <>
+        </>
+      </VStack>
+
+      {/* ── Right: metric card + preview image ── */}
+      <VStack align="stretch" gap={4}>
+
+        {/* Metric Card */}
+        {metric && (
+          <Box
+            borderRadius="12px"
+            border="1px solid"
+            borderColor="gray.300"
+            bg="gray.50"
+            px={6}
+            py={5}
+          >
+            <Flex align="center" justify="space-between">
+              <Box>
+                <Text
+                  fontSize="xs"
+                  fontWeight={600}
+                  letterSpacing="0.1em"
+                  textTransform="uppercase"
+                  color="gray.400"
+                  mb={1}
+                >
+                  {metric.label}
+                </Text>
+                <Text
+                  fontSize={{ base: "3xl", md: "4xl" }}
+                  fontWeight={700}
+                  letterSpacing="-0.03em"
+                  color="gray.900"
+                  lineHeight={1}
+                >
+                  {metric.value}
+                </Text>
+                {metric.note && (
+                  <Text fontSize="sm" color="gray.400" mt={1} fontWeight={400}>
+                    {metric.note}
+                  </Text>
+                )}
+              </Box>
+              {metric.icon && (
+                <Box
+                  fontSize="2xl"
+                  color="gray.300"
+                  flexShrink={0}
+                  ml={4}
+                >
+                  {metric.icon}
+                </Box>
+              )}
+            </Flex>
+          </Box>
+        )}
+
+        {/* Preview Image — first image/video poster from the project's media */}
+        {previewSrc && (
+          <Box
+            borderRadius="12px"
+            overflow="hidden"
+            bg="gray.50"
+            flexShrink={0}
+            position="relative"
+            className="media-item"
+            cursor="zoom-in"
+            onClick={() => openLightbox(media, previewIndex)}
+          >
+            <Image
+              src={previewSrc}
+              w="100%"
+              h="auto"
+              objectFit="cover"
+              borderRadius="12px"
+              loading="lazy"
+              display="block"
+            />
+
+            {/* Same hover hint as gallery */}
+            <Box
+              className="media-hint"
+              position="absolute"
+              inset={0}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              bg="rgba(0,0,0,0.22)"
+              opacity={0}
+              transition="opacity 0.2s ease"
+              borderRadius="12px"
+              pointerEvents="none"
+            >
+              <Box
+                bg="rgba(255,255,255,0.15)"
+                backdropFilter="blur(10px)"
+                borderRadius="full"
+                border="1px solid rgba(255,255,255,0.25)"
+                px={4}
+                py="6px"
+                fontSize="11px"
+                fontWeight={600}
+                color="white"
+                letterSpacing="0.08em"
+                textTransform="uppercase"
+              >
+                View fullscreen
+              </Box>
+            </Box>
+          </Box>
+        )}
+      </VStack>
+    </Grid>
+  );
+};
+
+// ---------------------------------------------------------------------------
 // ProjectLinks
 // ---------------------------------------------------------------------------
 const ProjectLinks = ({ links }) => (
-  <Flex gap={6} mt={8} flexWrap="wrap">
+  <Flex gap={6} mb={0} flexWrap="wrap">
     {links.map(({ label, href }) => (
       <Link
         key={label}
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        display="inline-flex"
-        alignItems="center"
-        gap={1}
-        fontSize="md"
-        fontWeight={500}
-        color="gray.900"
-        borderBottom="1.5px solid"
-        borderColor="gray.900"
-        pb="1px"
-        _hover={{ color: "gray.500", borderColor: "gray.400" }}
-        transition="color 0.2s, border-color 0.2s"
-        textDecoration="none"
       >
         {label}
-        <RxArrowTopRight size={16} />
+        <LuExternalLink />
       </Link>
     ))}
   </Flex>
 );
 
 // ---------------------------------------------------------------------------
-// ProjectSection
+// ProjectSection — updated to thread ProjectInfoSection between header + gallery
 // ---------------------------------------------------------------------------
-const ProjectSection = ({ year, title, subtitle, media, links = [], isFirst, projectsRef }) => (
-  <Box ref={isFirst ? projectsRef : undefined} as="section" pt={{ base: "48", md: "72" }}>
-    <ProjectHeader year={year} title={title} subtitle={subtitle} />
-    <ProjectGallery items={media} />
-    {links.length > 0 && <ProjectLinks links={links} />}
-  </Box>
-);
+const ProjectSection = ({
+  year, title, subtitle,
+  description, contributions, focusAreas, metric,
+  media, links = [],
+  isFirst, projectsRef,
+}) => {
+  const previewIndex = media.findIndex((m) => m.type === "image");
+
+  const previewSrc =
+    previewIndex !== -1 ? media[previewIndex].src : null;
+
+  const galleryMedia =
+    previewIndex !== -1
+      ? media.filter((_, i) => i !== previewIndex)
+      : media;
+
+  return (
+    <Box
+      ref={isFirst ? projectsRef : undefined}
+      as="section"
+      pt={{ base: "32", md: "72" }}
+    >
+      <ProjectHeader
+        year={year}
+        title={title}
+        subtitle={subtitle}
+      />
+
+      <ProjectInfoSection
+        description={description}
+        contributions={contributions}
+        focusAreas={focusAreas}
+        links={links}
+        metric={metric}
+        previewSrc={previewSrc}
+        media={media}                // ✅ full media
+        previewIndex={previewIndex}  // ✅ correct index
+      />
+
+      <ProjectGallery items={galleryMedia} />
+    </Box>
+  );
+};
 
 // ---------------------------------------------------------------------------
-// Bosch / creative media — defined once so lightbox can reference the list
+// Bosch / creative media
 // ---------------------------------------------------------------------------
 const BOSCH_MEDIA = [
   { src: "./assets/EV_EVOLVE50M_Array_Exploded_Black_nbg.png", type: "image", href: "https://products.electrovoice.com/emea/en/evolve-50m/", label: "See product page", maxH: "600px" },
@@ -548,8 +777,6 @@ const CreativeMediaItem = ({ flatIdx }) => {
         pt={aspectRatio ? 0 : 4}
         transition="transform 0.4s ease"
       />
-
-      {/* Hover hint */}
       <Box
         className="media-hint"
         position="absolute"
@@ -579,8 +806,6 @@ const CreativeMediaItem = ({ flatIdx }) => {
           View fullscreen
         </Box>
       </Box>
-
-      {/* Product link — stops propagation so it doesn't open the lightbox */}
       <Button
         as="a"
         href={href}
@@ -636,7 +861,6 @@ const OtherCreativeSection = () => (
     <Text fontSize="lg" color="gray.500" mb={10}>
       3D Visuals for Electro-Voice, RTS and TELEX
     </Text>
-
     <VStack gap={4} align="stretch">
       <CreativeMediaItem flatIdx={0} />
       <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
@@ -675,18 +899,34 @@ const ScrollToTopButton = ({ visible, onClick }) => (
 );
 
 // ---------------------------------------------------------------------------
-// Project data
+// PROJECTS data — extended with description, contributions, focusAreas, metric
+// metric.note is optional context shown beneath the value
 // ---------------------------------------------------------------------------
 const PROJECTS = [
   {
     year: "2026",
     title: "Wave Link 3.0",
-    subtitle: "Major redesign of Elgato's audio-mixing software",
+    subtitle: "Redesign of Elgato's audio-mixing software",
+    description:
+      "Wave Link 3.0 is a ground-up redesign of Elgato's audio-mixing application. The goal was to replace a rigid routing model with a flexible, visual system that scales from first-time streamers to professional broadcast engineers, without compromising Elgato’s hardware support.",
+    contributions: [
+      "Conducted user research to inform the redesign",
+      "Designed a dedicated device view for improved control and clarity",
+      "Designed and iterated onboarding flows and guided setup tours",
+      "Defined motion language and micro-interaction patterns",
+      "Collaborated on the design of a flexible routing surface and channel architecture",
+    ],
+    focusAreas: ["Product Design","Interaction Design", "Information Architecture", "User Research", "Motion Design", "Onboarding UX", "Design Systems"],
+    metric: {
+      label: "Unique users (Beta)",
+      value: "70.000+",
+      note: "early adopters during beta",
+    },
     media: [
-      { src: "./assets/Limitless_routing_Desk.webm", type: "video" },
+      { src: "./assets/WL3_Routing_table.jpg", type: "image"},
+      { src: "./assets/Limitless_routing_Desk.webm", type: "video"},
       { src: "./assets/WL3Inputs.mp4", type: "video", grid: true },
-      { src: "./assets/WL3_Routing_table.jpg", type: "image", grid: true },
-      { src: "./assets/WL3_audio_effects.jpg", type: "image" },
+      { src: "./assets/WL3_audio_effects.jpg", type: "image", grid: true  },
       { src: "./assets/WL3_Setup_tour.mp4", type: "video" },
     ],
     links: [
@@ -698,11 +938,19 @@ const PROJECTS = [
     year: "2026",
     title: "Wave Link plugin for Stream Deck",
     subtitle: "Design of a tactile plugin for Wave Link",
+    description:
+      "Bringing Wave Link’s audio-mixing capabilities to the physical Stream Deck required rethinking how complex software controls translate into tangible, one-press actions. The plugin maps mixer channels, volume controls, and mute states to customizable keys, enabling hands-on control without leaving the mic.",
+    contributions: [
+      "Led UX and interaction design across the full redesign cycle",
+      "Designed the key layout system and interaction model",
+      "Created dial and key components for Stream Deck+",
+      "Collaborated with the Stream Deck team to align with platform constraints",
+    ],
+    focusAreas: ["Visual Design", "Interaction Design", "Hardware UX", "Plugin Design"],
     media: [
-      { src: "./assets/2026-03-03T11_06_18.004592.mp4", type: "video" },
       { src: "./assets/WaveLink3(Beta)-preview-dials.png", type: "image" },
+      { src: "./assets/2026-03-03T11_06_18.004592.mp4", type: "video" },
       { src: "./assets/04_06_StreamDeckControl_Desktop.png", type: "image" },
-
     ],
     links: [
       { label: "Learn more", href: "https://www.elgato.com/de/en/explorer/products/wave/wave-link-plugin-for-stream-deck/" },
@@ -713,6 +961,20 @@ const PROJECTS = [
     year: "2025",
     title: "Elgato Studio",
     subtitle: "Brand-new capture app and companion Stream Deck plugin",
+    description:
+      "Elgato Studio consolidates recording, snapshots, and live preview into a single, lightweight app, with seamless Stream Deck integration for instant control. The challenge was making powerful workflows feel effortless, especially for first-time users.",
+    contributions: [
+      "Led end-to-end UX and UI design from concept to launch",
+      "Designed the core interface for macOS and Windows platforms",
+      "Created Stream Deck plugin layouts and key iconography",
+      "Conducted usability testing with target creators",
+    ],
+    focusAreas: ["Product Design", "Usability Testing", "Iconography", "Cross-Platform UX", "Design Systems"],
+    metric: {
+      label: "Unique users",
+      value: "70.000+",
+      note: "users in the first 6 months after launch",
+    },
     media: [
       { src: "./assets/elgato_studio_app_game_screen_recording.png", type: "image" },
       { src: "./assets/ElgatoStudio-preview-plugin.png", type: "image" },
@@ -726,9 +988,23 @@ const PROJECTS = [
     year: "2025",
     title: "Wave Link 2.0",
     subtitle: "Streamline audio routing and AI enhanced features",
+    description:
+      "Wave Link 2.0 introduced a major evolution of the routing model, replacing multi-step configuration with one-click channel assignment, while introducing AI-powered voice isolation and noise suppression.",
+    contributions: [
+      "Redesigned the routing flow to simplify channel assignment",
+      "Designed the Voice Focus audio effect panel",
+      "Designed the Sound Check feature for real-time preview of audio effects",
+      "Created Stream Deck plugin layouts and iconography",
+    ],
+    focusAreas: ["Product Design", "AI Design", "Iconography", "User Research"],
+    metric: {
+      label: "Unique users",
+      value: "350.000+",
+      note: "users prior to the 3.0 release",
+    },
     media: [
-      { src: "./assets/WL2.0_Apps.webm", type: "video" },
       { src: "./assets/Screenshot-2025-02-04-at-5.22.36 PM.png", type: "image", grid: true },
+      { src: "./assets/WL2.0_Apps.webm", type: "video" },
       { src: "./assets/AddToWaveLink.jpg", type: "image", grid: true },
       { src: "./assets/WaveLink20_VoiceFocus.mp4", type: "video" },
     ],
@@ -740,9 +1016,22 @@ const PROJECTS = [
     year: "2024",
     title: "Elgato Capture",
     subtitle: "Design of an iPad app for Elgato capture cards",
+    description:
+      "Elgato Capture turns an iPad into a portable gaming monitor and recording station. The design balances low-latency performance with a touch-first interface accessible to casual gamers.",
+    contributions: [
+      "Designed the full iPadOS app from initial concept to App Store launch",
+      "Created fullscreen monitoring, recording, and snapshot flows",
+      "Produced App Store visuals and preview assets",
+    ],
+    focusAreas: ["Mobile UX", "iPadOS", "Accessibility"],
+    metric: {
+      label: "App Store Rating",
+      value: "4.4★",
+      note: "Elgato Capture on the App Store",
+    },
     media: [
-      { src: "./assets/Game_Capture_Neo_Lifestyle_Shot_02.jpg", type: "image" },
-      { src: "./assets/Game_Capture_Neo_Lifestyle_Shot_01.png", type: "image", grid: true },
+      { src: "./assets/Game_Capture_Neo_Lifestyle_Shot_01.png", type: "image" },
+      { src: "./assets/Game_Capture_Neo_Lifestyle_Shot_02.jpg", type: "image", grid: true },
       { src: "./assets/Game_Capture_4K_X_Lifestyle_Shot_06_A.png", type: "image", grid: true },
     ],
     links: [
@@ -753,16 +1042,34 @@ const PROJECTS = [
     year: "2022–2023",
     title: "UX Research and UI for GritGene",
     subtitle: "Improving usability for complex 3D workflows",
+    description:
+      "GritGene is a real-time 3D rendering engine for technical artists and generative designers. The challenge was making complex node-based workflows approachable without sacrificing depth.",
+    contributions: [
+      "Conducted contextual inquiry sessions with 3D artists and technical directors",
+      "Performed heuristic evaluation of the existing product and identified key usability issues",
+      "Designed new features such as input value helpers for precision workflows",
+      "Contributed to and used the design system for UI consistency and scalability",
+    ],
+    focusAreas: ["UX Research", "Heuristic Evaluation", "Product Design", "Design Systems"],
     media: [
       { src: "./assets/Input_value_helper.png", type: "image" },
+      { src: "./assets/gritgene.png", type: "image" },
     ],
     links: [],
   },
-
   {
     year: "Personal Project",
     title: "Net Worth Tracker",
     subtitle: "A personal finance dashboard",
+    description:
+      "A self-initiated project for tracking personal net worth across accounts, assets, and liabilities. Built to address a personal need and the gap between overly complex and overly simplistic finance tools.",
+    contributions: [
+      "Sole designer and product owner from concept to working product",
+      "Designed the interface and underlying data model",
+      "Integrated data visualization components",
+      "Designed responsive layouts across mobile, tablet, and desktop",
+    ],
+    focusAreas: ["Product Design", "Data Visualisation", "Mobile UX", "Personal Finance", "Accessibility"],
     media: [
       { src: "./assets/iPhone_01.png", type: "image" },
       { src: "./assets/iPhone_02.png", type: "image" },
