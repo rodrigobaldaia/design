@@ -6,7 +6,7 @@ import { ArrowLeft } from "lucide-react";
 function ColorPalette() {
   return (
 
-    <VStack maxW="100%" w="100%" pt={6} align={"left"} px={{ base: "8", xl: "0" }} py={8} flex="1" minH={0}>
+    <VStack maxW="100%" w="100%" pt={{ base: "120px", md: "136px" }} align={"left"} px={{ base: "8", xl: "0" }} pb={8} flex="1" minH={0}>
       <HStack align={"start"} spacing={4}>
         <IconButton display={{ base: "none", md: "flex" }} aria-label="Go back one page"
           variant="ghost" size="md" onClick={() => window.history.back()}>

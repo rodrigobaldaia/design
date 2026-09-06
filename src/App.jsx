@@ -4,7 +4,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { Flex, Box, Spinner } from "@chakra-ui/react";
 import Home from "./pages/Home";
-import { Toaster, toaster } from "./components/ui/toaster"
+import { Toaster } from "./components/ui/toaster"
 
 // Lazy load
 const About = lazy(() => import("./pages/About"));

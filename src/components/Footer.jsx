@@ -1,101 +1,112 @@
-"use client"
-
-import { Box, Button, Flex, IconButton, Text, Link, HStack, Heading } from "@chakra-ui/react";
-import { ArrowUp } from "lucide-react";
+import { Box, Container, Flex, Heading, Link, Text } from "@chakra-ui/react";
 import { FaLinkedin } from "@react-icons/all-files/fa/FaLinkedin";
+import { LuCopy, LuCheck } from "react-icons/lu";
 import { RxArrowTopRight } from "react-icons/rx";
-import { LuCopy } from "react-icons/lu";
 import { useState } from "react";
-import { Toaster, toaster } from "../components/ui/toaster"
+import { toaster } from "../components/ui/toaster";
 
+/**
+ * Contact footer — the closing section of every page. Large editorial
+ * invitation, email copy-to-clipboard and LinkedIn.
+ */
 const Footer = () => {
-  const [copied, setCopied] = useState(false);
   const email = "rodrigopratabaldaia@gmail.com";
-  const [isHovered, setIsHovered] = useState(false);
-
+  const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(email);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const copyToClipboard = async () => {
-    navigator.clipboard.writeText(email);
     toaster.create({
-      title: `Copied to clipboard.`,
+      title: "Copied to clipboard.",
       duration: 2000,
       closable: false,
       type: "success",
     });
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <Box as="footer" py={8} px={{ base: "8", xl: "0" }} bg="white">
-      <Flex
-        maxW="1240px"
-        mx="auto"
-        justify="space-between"
-        align="left"
-        direction={{ base: "column", md: "row" }}
-      >
-        {/* Desktop: Social & Show email + hover effect */}
-        <HStack >
+    <Box as="footer" bg="bg.canvas" borderTop="1px solid" borderColor="border">
+      <Container maxW="1240px" mx="auto" px={{ base: 6, md: 8 }} pt={{ base: 20, md: 28 }} pb={10}>
+        <Heading
+          as="p"
+          fontFamily="display"
+          fontSize={{ base: "clamp(2rem, 8vw, 4rem)", md: "clamp(2.5rem, 6vw, 4.5rem)" }}
+          fontWeight={600}
+          lineHeight={1.05}
+          letterSpacing="-0.03em"
+          mb={{ base: 10, md: 14 }}
+        >
+          Let&rsquo;s build something{" "}
+          <Box as="em" fontFamily="serif" fontWeight={400}>
+            clear.
+          </Box>
+        </Heading>
 
-          {/* LinkedIn Button Desktop */}
-          <IconButton
-            as="a" href="https://www.linkedin.com/in/rodrigopratabaldaia/" target="_blank"
-            display={{ base: "none", md: "flex" }}
-            aria-label="LinkedIn"
-            variant="ghost"
-          >
-            <FaLinkedin />
-          </IconButton>
+        <Flex
+          direction={{ base: "column", md: "row" }}
+          justify="space-between"
+          align={{ base: "stretch", md: "flex-end" }}
+          gap={8}
+        >
+          <Flex direction="column" gap={3} align="start">
+            <Text
+              fontSize="xs"
+              fontWeight={600}
+              letterSpacing="0.12em"
+              textTransform="uppercase"
+              color="fg.subtle"
+            >
+              Get in touch
+            </Text>
 
-          <HStack
-            spacing={4}
-            display={{ base: "none", md: "flex" }}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-          >
             <Link
-              onClick={() => copyToClipboard(email)}
-            >{copied ? "Email copied!" : email}</Link>
-            {isHovered && (
-              <LuCopy />
+              as="button"
+              onClick={handleCopy}
+              fontSize={{ base: "md", md: "lg" }}
+              fontWeight={500}
+              color="fg"
+              textDecoration="none"
+              _hover={{ opacity: 0.7 }}
+              transition="opacity 0.2s ease"
+              display="inline-flex"
+              alignItems="center"
+              gap={2}
+              aria-label={`Copy email address ${email}`}
+            >
+              {email}
+              {copied ? <LuCheck aria-hidden /> : <LuCopy aria-hidden />}
+            </Link>
 
-            )}
-          </HStack>
+            <Link
+              href="https://www.linkedin.com/in/rodrigopratabaldaia/"
+              target="_blank"
+              rel="noopener noreferrer"
+              fontSize={{ base: "md", md: "lg" }}
+              fontWeight={500}
+              color="fg"
+              _hover={{ opacity: 0.7 }}
+              transition="opacity 0.2s ease"
+              display="inline-flex"
+              alignItems="center"
+              gap={1}
+            >
+              LinkedIn <RxArrowTopRight aria-hidden />
+            </Link>
+          </Flex>
 
-        </HStack>
-        
-
-
-        {/* Mobile: Show a full button with email + clipboard icon + Linkedin */}
-        <Flex direction="column" display={{ base: "flex", md: "none" }} gap={2} mt={8} fontSize="md">
-          <Heading as="h1" fontWeight="semibold">
-            Contact
-          </Heading>
-
-          <Text
-            w="fit-content"
+          <Flex
+            justify="space-between"
+            align="flex-end"
+            color="fg.subtle"
+            fontSize="sm"
+            gap={6}
           >
-            {email}
-          </Text>
-
-
-          <Link href="https://www.linkedin.com/in/rodrigobaldaia/" target="_blank">
-            Linkedin
-            <RxArrowTopRight />
-          </Link>
-
+            <Text>© 2026 Rodrigo Prata Baldaia</Text>
+            <Text>UX Designer · Germany</Text>
+          </Flex>
         </Flex>
-
-      </Flex>
+      </Container>
     </Box>
   );
 };

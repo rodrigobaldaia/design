@@ -100,8 +100,8 @@ function About() {
         bg={bg}
         borderRadius="lg"
         overflow="hidden"
-        border={bg === "white" ? "1px solid" : "none"}
-        borderColor="gray.200"
+        border="1px solid"
+        borderColor="border"
       >
         <Image src={icon} h={10} />
       </Box>
@@ -110,7 +110,7 @@ function About() {
         <Heading as="h2" fontSize="lg">
           {title}
         </Heading>
-        <Text color="gray.500" fontSize="md">
+        <Text color="fg.muted" fontSize="md">
           {subtitle}
         </Text>
       </Box>
@@ -122,7 +122,7 @@ function About() {
   const col2 = skills.slice(midpoint);
 
   return (
-    <Flex maxW="800px" mx="auto" direction={"column"} py={12} gap={24} px={{ base: "8", xl: "0" }} mb={16}>
+    <Flex maxW="800px" mx="auto" direction={"column"} pt={{ base: "140px", md: "160px" }} pb={12} gap={24} px={{ base: "8", xl: "0" }} mb={16}>
       <Box flex="2" mt={{ base: 16, xl: 32 }} fontSize="xl">
         <Flex justify={{ base: "center", md: "center" }}>
           <Image src="/design/assets/photo_rb.jpg" boxSize="180px" rounded="lg" mb={16} />
@@ -168,11 +168,11 @@ function About() {
 
           <HStack mb={4} gap={6} alignItems="top">
             <Box
-              bg="white"
+              bg="bg"
               borderRadius="lg"
               overflow="hidden"
               border="1px solid"
-              borderColor="gray.400"
+              borderColor="border.emphasized"
               h={20}>
 
               <Image
@@ -185,7 +185,7 @@ function About() {
 
             <Flex direction={{ base: "column", md: "row" }} gap={4} align={{ base: "left", md: "center" }}>
               <Box>
-                <Text color="gray.500" fontSize={"md"}>
+                <Text color="fg.muted" fontSize={"md"}>
                   2023 - Present
                 </Text>
 
@@ -199,7 +199,7 @@ function About() {
 
               </Box>
 
-              <Box w="1px" h="40px" bg="blackAlpha.400" display={{ base: "none", md: "flex" }} />
+              <Box w="1px" h="40px" bg="border" display={{ base: "none", md: "flex" }} />
 
               <Box display="flex" alignItems="center">
                 <Image
@@ -216,11 +216,11 @@ function About() {
 
           <HStack mb={4} gap={6} alignItems="center">
             <Box
-              bg="white"
+              bg="bg"
               borderRadius="lg"
               overflow="hidden"
               border="1px solid"
-              borderColor="gray.400">
+              borderColor="border.emphasized">
 
               <Image
                 src="./assets/gritworld-logo.png"
@@ -231,7 +231,7 @@ function About() {
             </Box>
 
             <Box>
-              <Text color="gray.500" fontSize={"md"}>
+              <Text color="fg.muted" fontSize={"md"}>
                 2022 - 2023
               </Text>
 
@@ -249,11 +249,11 @@ function About() {
 
           <HStack mb={4} gap={6} alignItems="center">
             <Box
-              bg="white"
+              bg="bg"
               borderRadius="lg"
               overflow="hidden"
               border="1px solid"
-              borderColor="gray.400">
+              borderColor="border.emphasized">
 
               <Image
                 src="./assets/bosch-logo.svg"
@@ -264,7 +264,7 @@ function About() {
             </Box>
 
             <Box>
-              <Text color="gray.500" fontSize={"md"}>
+              <Text color="fg.muted" fontSize={"md"}>
                 2020 - 2022
               </Text>
 
@@ -288,7 +288,7 @@ function About() {
         <HStack mb={4} gap={6} alignItems="center">
 
           <Box>
-            <Text color="gray.500" fontSize={"md"}>
+            <Text color="fg.muted" fontSize={"md"}>
               2025
             </Text>
 
@@ -306,7 +306,7 @@ function About() {
         <HStack mb={4} gap={6} alignItems="center">
 
           <Box>
-            <Text color="gray.500" fontSize={"md"}>
+            <Text color="fg.muted" fontSize={"md"}>
               2024
             </Text>
 
